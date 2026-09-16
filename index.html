@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>b;eat Landing Page</title>
+<style>
+  @font-face { font-family:'Pretendard'; font-weight:400; src:url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/woff2/Pretendard-Regular.woff2') format('woff2'); }
+  @font-face { font-family:'Pretendard'; font-weight:500; src:url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/woff2/Pretendard-Medium.woff2') format('woff2'); }
+  @font-face { font-family:'Pretendard'; font-weight:600; src:url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/woff2/Pretendard-SemiBold.woff2') format('woff2'); }
+  @font-face { font-family:'Pretendard'; font-weight:700; src:url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/woff2/Pretendard-Bold.woff2') format('woff2'); }
+  @font-face { font-family:'Pretendard'; font-weight:800; src:url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/woff2/Pretendard-ExtraBold.woff2') format('woff2'); }
+
+  * { box-sizing: border-box; margin:0; padding:0; }
+  html { scroll-behavior:smooth; }
+  body { font-family:'Pretendard', sans-serif; background:#fff; color:#151515; }
+  img { display:block; max-width:100%; }
+  .page { width:100%; display:flex; flex-direction:column; align-items:center; }
+  section { width:100%; display:flex; flex-direction:column; align-items:center; scroll-margin-top:90px; }
+
+  /* Shared section-title pattern (60px bold stacked title, used across multiple sections) */
+  .stats .title, .feature-grid .title, .ai-solution .title, .hybrid-store .title,
+  .tech-timeline .title, .labor-cost .title, .investment-types .title {
+    display:flex; flex-direction:column; gap:12px; font-weight:800; font-size:60px; line-height:1; text-align:center;
+  }
+  .title .blue { color:#559ce3; }
+
+  /* Text reveal-on-scroll (word-by-word slide-up animation for section titles, with a light fade) */
+  .reveal-word { display:inline-block; opacity:.4; transform:translateY(18px);
+    transition:opacity .5s ease, transform .8s cubic-bezier(0.22,1,0.36,1); }
+  .reveal-target.revealed .reveal-word { opacity:1; transform:translateY(0); }
+  .reveal-img { opacity:.4; transform:translateY(24px);
+    transition:opacity .5s ease, transform .9s cubic-bezier(0.22,1,0.36,1); }
+  .reveal-img.revealed { opacity:1; transform:translateY(0); }
+  .hero-reveal { opacity:.4; transform:translateY(120px);
+    transition:opacity .6s ease, transform 1s cubic-bezier(0.22,1,0.36,1); }
+  .hero-reveal.revealed { opacity:1; transform:translateY(0); }
+  @media (prefers-reduced-motion: reduce) {
+    .reveal-word { transition:none; opacity:1; transform:none; }
+    .reveal-img { transition:none; opacity:1; transform:none; }
+    .hero-reveal { transition:none; opacity:1; transform:none; }
+  }
+
+  /* ---------- 01 Header + Hero ---------- */
+  .hero { position:relative; width:100%; aspect-ratio:1920/1080; background:#000; overflow:hidden; }
+  .hero-bg { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.9; }
+  .hero::after { content:''; position:absolute; inset:0; background:rgba(0,0,0,.4); z-index:1; }
+  .header-nav { position:fixed; top:0; left:0; right:0; z-index:50; display:flex; align-items:center; justify-content:space-between; padding:20px 8.3%; height:90px; background:transparent; transition:background .25s ease; }
+  .header-nav.scrolled { background:#151515; }
+  .logo-mark { font-size:22px; font-weight:800; color:#fff; letter-spacing:.5px; }
+  .logo-mark b { color:#559ce3; }
+  .nav-items { display:flex; align-items:center; gap:28px; }
+  .nav-items p { font-weight:500; font-size:18px; color:#fff; white-space:nowrap; }
+  .nav-items a { text-decoration:none; display:inline-flex; align-items:center; }
+  .cta-btn { background:#559ce3; padding:8px 20px; border-radius:33px; }
+  .cta-btn p { color:#fff; }
+  .hero-content { position:relative; z-index:2; flex:1; width:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:18px; padding-top:90px; }
+  .hero-title { width:100%; display:flex; flex-direction:column; align-items:center; text-align:center; line-height:1.12; }
+  .hero-tagline { margin-top:24px; color:#999; font-weight:500; font-size:24px; letter-spacing:12px; text-align:center; }
+
+  /* ---------- 02 Promo Banner ---------- */
+  .promo-banner { background:#559ce3; display:flex; flex-direction:column; align-items:center; gap:40px; padding:100px 8.3% 120px; }
+  .promo-badge { background:rgba(26,35,126,0.25); padding:10px 24px; border-radius:25px; color:#fff; font-weight:500; font-size:20px; }
+  .promo-title { font-weight:800; font-size:60px; text-align:center; line-height:1.15; }
+  .promo-title p { margin-bottom:6px; }
+  .promo-title .dark { color:#151515; } .promo-title .white { color:#fff; }
+  .promo-cards { display:flex; gap:24px; width:100%; max-width:1600px; justify-content:center; flex-wrap:wrap; }
+  .promo-card { position:relative; }
+  .promo-card .card-body { background:#fff; width:382px; max-width:80vw; height:200px; margin-top:25px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px; padding:20px 24px 0; }
+  .promo-card .card-label { font-weight:700; font-size:24px; color:#454545; }
+  .promo-card .card-price { display:flex; align-items:baseline; gap:24px; }
+  .promo-card .price-old { position:relative; min-width:162px; font-weight:800; font-size:40px; color:#999; }
+  .promo-card .price-old .unit { font-weight:700; font-size:32px; }
+  .promo-card .price-old .strike { position:absolute; left:-14px; top:11px; width:176px; max-width:none; height:15px; }
+  .promo-card .price-new { font-weight:800; font-size:52px; color:#151515; }
+  .promo-card .price-new .unit { font-weight:700; font-size:40px; }
+  .promo-card .num { position:absolute; top:0; left:50%; transform:translateX(-50%); background:#283086; color:#fff; width:50px; height:50px; border-radius:80px; display:flex; align-items:center; justify-content:center; font-weight:600; font-size:24px; }
+
+  /* ---------- 03 Stats ---------- */
+  .stats { position:relative; padding:120px 8.3%; background:#111; overflow:hidden; }
+  .stats-photo { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.55; }
+  .stats .scrim { position:absolute; inset:0; background:linear-gradient(180deg, rgba(0,0,0,.15), rgba(0,0,0,.05) 40%, rgba(0,0,0,.2)); }
+  .stats .content { position:relative; z-index:1; display:flex; flex-direction:column; align-items:center; width:100%; max-width:1600px; }
+  .stats .title .white { color:#fff; }
+  .stats .graph-area { position:relative; margin-top:32px; width:1400px; max-width:100%; }
+  .stats .sub-text { position:absolute; top:0; left:50%; transform:translateX(-50%); display:flex; flex-direction:column; align-items:center; gap:8px; color:#999; text-align:center; white-space:nowrap; }
+  .stats .sub-text .l1 { font-size:24px; } .stats .sub-text .l3 { font-size:16px; }
+  .stats .graph-wrap { width:100%; }
+
+  /* ---------- 04 Tech Feature Grid ---------- */
+  .feature-grid { padding:120px 8.3%; gap:32px; }
+  .feature-grid .sub-text { color:#454545; font-size:24px; text-align:center; display:flex; flex-direction:column; gap:8px; padding-bottom:28px; }
+  .feature-rows { display:flex; flex-direction:column; gap:70px; width:100%; max-width:1600px; }
+  .feature-row { display:flex; gap:26px; justify-content:space-between; flex-wrap:wrap; }
+  .feature-card { display:flex; flex-direction:column; align-items:center; gap:24px; flex:1; min-width:280px; }
+  .feature-card .img-wrap { width:100%; max-width:516px; aspect-ratio:516/360; overflow:hidden; background:#000; }
+  .feature-card .img-wrap img { width:100%; height:100%; object-fit:cover; }
+  .feature-card .f-title { display:flex; flex-direction:column; gap:4px; padding-top:8px; font-weight:800; font-size:32px; text-align:center; line-height:1.2; }
+  .feature-card .f-title .dark { color:#151515; } .feature-card .f-title .blue { color:#559ce3; }
+  .feature-card .f-desc { display:flex; flex-direction:column; gap:8px; color:#454545; font-size:20px; text-align:center; line-height:1.3; }
+
+  /* ---------- 05 AI Solution ---------- */
+  .ai-solution { background:#e4eef8; padding:120px 8.3%; gap:32px; }
+  .ai-tabs { display:flex; gap:10px; padding-top:16px; }
+  .ai-tab { padding:10px 24px; border-radius:20px; font-weight:600; font-size:20px; color:#737882; cursor:pointer; transition:background-color .2s ease, color .2s ease; }
+  .ai-tab:hover:not(.active) { background:rgba(85,156,227,0.12); color:#559ce3; }
+  .ai-tab.active { background:#559ce3; color:#fff; padding:10px 24px; border-radius:30px; }
+  .ai-panel { position:relative; background:#fff; border:1px solid #e5e5eb; width:100%; max-width:1600px; display:flex; justify-content:flex-end; padding:50px 100px 50px 0; overflow:hidden; }
+  .ai-panel .imgs { display:flex; align-items:center; justify-content:flex-end; }
+  .ai-panel .imgs img { max-width:100%; width:917px; }
+  .ai-panel .text { position:absolute; left:100px; top:120px; max-width:430px; display:flex; flex-direction:column; gap:12px; }
+  .ai-panel .eyebrow { color:#559ce3; font-weight:500; font-size:28px; }
+  .ai-panel .headline { font-weight:800; font-size:48px; color:#151515; line-height:1.17; }
+  .ai-panel .desc { color:#454545; font-size:20px; padding-top:12px; display:flex; flex-direction:column; gap:4px; }
+
+  /* ---------- 06 Seasonal Menu ---------- */
+  .seasonal { padding:120px 0; gap:32px; }
+  .seasonal .title { padding:0 8.3%; font-weight:800; font-size:60px; color:#151515; text-align:center; }
+  .seasonal .sub-text, .customer-reviews .sub-text { padding:0 8.3% 28px; color:#454545; font-size:24px; text-align:center; }
+  .poster-row { width:100%; overflow:hidden; }
+  .poster-track { display:flex; gap:24px; width:max-content; animation:posterScroll 32s linear infinite; }
+  .poster-row:hover .poster-track { animation-play-state:paused; }
+  .poster-track img { flex:0 0 282px; width:282px; aspect-ratio:282/500; object-fit:cover; }
+  @keyframes posterScroll { from{ transform:translateX(0); } to{ transform:translateX(-2448px); } }
+
+  /* ---------- 07 Operator Review Video ---------- */
+  .review-video { background:#21222e; padding:120px 8.3%; }
+  .review-video .title { font-weight:800; font-size:60px; color:#fff; text-align:center; margin-bottom:32px; }
+  .review-video .stars { color:#559ce3; font-size:32px; letter-spacing:6.4px; padding-bottom:60px; }
+  .video-wrap { width:100%; max-width:1400px; aspect-ratio:1400/788; position:relative; background:#151515; overflow:hidden; }
+  .video-wrap iframe { position:absolute; inset:0; width:100%; height:100%; border:0; }
+
+  /* ---------- 08 Premium Locations ---------- */
+  .premium-locations { padding:120px 0; gap:32px; }
+  .premium-locations .title { padding:0 8.3%; display:flex; flex-direction:column; gap:12px; font-weight:800; font-size:60px; text-align:center; line-height:1.2; }
+  .premium-locations .sub-text { padding:0 8.3% 28px; display:flex; flex-direction:column; gap:8px; color:#454545; font-size:24px; letter-spacing:-0.6px; text-align:center; }
+  .loc-carousel { width:100%; overflow-x:auto; overflow-y:hidden; overscroll-behavior-x:contain; scrollbar-width:none; -ms-overflow-style:none; }
+  .loc-carousel::-webkit-scrollbar { display:none; }
+  .loc-track { display:flex; gap:32px; width:max-content; padding:0 8.3%; }
+  .location-card { flex:0 0 388px; width:388px; display:flex; flex-direction:column; gap:24px; }
+  .location-card .img-wrap { width:100%; aspect-ratio:388/300; overflow:hidden; }
+  .location-card .img-wrap img { width:100%; height:100%; object-fit:cover; }
+  .location-card .cat { font-weight:800; font-size:32px; color:#151515; }
+  .location-card .cat .en { color:#559ce3; font-weight:400; font-size:16px; margin-left:4px; }
+  .location-card .desc { display:flex; flex-direction:column; gap:8px; font-size:20px; color:#454545; letter-spacing:-0.5px; line-height:1; }
+  .loc-scrollbar { width:100%; max-width:1600px; padding:68px 8.3% 0; display:flex; align-items:center; gap:20px; }
+  .loc-track-bg { position:relative; flex:1; height:2px; background:#e5e5e5; border-radius:1px; }
+  .loc-thumb { position:absolute; top:0; left:0; height:2px; background:#999; border-radius:1px; width:30%; transition:left .1s linear; }
+  .loc-arrows { display:flex; gap:20px; flex-shrink:0; }
+  .loc-arrow { width:30px; height:20px; display:flex; align-items:center; justify-content:center; border:none; background:none; cursor:pointer; padding:0; opacity:1; transition:opacity .2s ease; }
+  .loc-arrow img { width:100%; height:100%; object-fit:contain; }
+  .loc-arrow:hover { opacity:.6; }
+
+  /* ---------- 09 Hybrid Store ---------- */
+  .hybrid-store { background:#e4eef8; padding:120px 8.3% 0; gap:60px; }
+  .hybrid-inner { width:100%; max-width:1600px; display:flex; flex-direction:column; gap:60px; }
+  .hybrid-wrap { position:relative; width:100%; padding-top:37.5%; }
+  .hybrid-wrap .photo { position:absolute; left:0; top:0; width:66.25%; height:100%; overflow:hidden; }
+  .hybrid-wrap .photo img { width:100%; height:100%; object-fit:cover; display:block; }
+  .hybrid-wrap .panel { position:absolute; left:61.375%; top:30.6667%; width:38.625%; height:69.3333%; background:#559ce3; display:flex; align-items:center; justify-content:center; padding:24px; box-sizing:border-box; }
+  .hybrid-wrap .panel-inner { display:flex; flex-direction:column; gap:32px; color:#fff; max-width:468px; }
+  .hybrid-wrap .main-text { display:flex; flex-direction:column; gap:12px; font-size:32px; font-weight:800; line-height:1; }
+  .hybrid-wrap .sub-text-block { display:flex; flex-direction:column; gap:8px; font-size:20px; font-weight:400; line-height:1; }
+  .hybrid-wrap .dots { position:absolute; left:78.0625%; top:19%; display:flex; gap:12px; }
+  .hybrid-wrap .dots .dot { width:20px; height:20px; border-radius:50%; background:#fff; cursor:pointer; padding:0; border:none; box-sizing:border-box; }
+  .hybrid-wrap .dots .dot.active { border:4px solid #559ce3; }
+
+  /* ---------- 10 Customer Reviews ---------- */
+  .customer-reviews { background:#e4eef8; padding:120px 0; gap:32px; }
+  .customer-reviews .title { padding:0 8.3%; font-weight:800; font-size:60px; text-align:center; }
+  .reviews-group { width:100%; display:flex; flex-direction:column; gap:16px; }
+  .clip-carousel { width:100%; overflow:hidden; }
+  .clip-track { display:flex; gap:16px; width:max-content; padding:0 8.3%; animation:clipScroll 40s linear infinite; will-change:transform; }
+  .clip-carousel:hover .clip-track { animation-play-state:paused; }
+  .clip-card { flex:0 0 348px; width:348px; height:602px; }
+  .clip-card a { display:block; width:100%; height:100%; }
+  .clip-card img { width:100%; height:100%; object-fit:cover; display:block; }
+  @keyframes clipScroll { from{ transform:translateX(0); } to{ transform:translateX(-2184px); } }
+  .reviews-row { width:100%; overflow-x:auto; overflow-y:hidden; overscroll-behavior-x:contain; scrollbar-width:none; -ms-overflow-style:none; }
+  .reviews-row::-webkit-scrollbar { display:none; }
+  .reviews-track { display:flex; gap:16px; width:max-content; padding:0 8.3%; box-sizing:border-box; }
+  .review-card { flex:0 0 348px; width:348px; height:462px; background:#fff; box-sizing:border-box; }
+  .review-card .img-wrap { width:100%; aspect-ratio:348/242; overflow:hidden; }
+  .review-card .img-wrap img { width:100%; height:100%; object-fit:cover; }
+  .review-card .body { padding:24px 20px 20px; display:flex; flex-direction:column; gap:12px; }
+  .review-card .badge { display:block; height:33px; }
+  .review-card .badge img { height:100%; width:auto; display:block; }
+  .review-card .stars-sm { display:block; height:18px; }
+  .review-card .stars-sm img { height:100%; width:auto; display:block; }
+  .review-card .txt { font-size:20px; color:#454545; letter-spacing:-0.6px; line-height:28px; }
+  .review-card .txt.lg { font-size:24px; line-height:32px; }
+
+  /* ---------- 11 Tech Timeline ---------- */
+  .tech-timeline { padding:120px 8.3%; gap:32px; }
+  .tech-timeline .sub-text, .labor-cost .sub-text { color:#454545; font-size:24px; text-align:center; padding-bottom:28px; }
+  .timeline-wrap { display:flex; width:100%; max-width:1600px; gap:96px; justify-content:center; flex-wrap:wrap; }
+  .timeline-badge { flex:1; min-width:300px; max-width:750px; }
+  .timeline-badge img { width:100%; display:block; }
+  .timeline-cols { flex:2; min-width:400px; display:flex; gap:96px; }
+  .timeline-col { flex:1; display:flex; flex-direction:column; gap:24px; }
+  .timeline-item { display:contents; }
+  .timeline-item .year { color:#1a237e; font-weight:800; font-size:32px; letter-spacing:-1.6px; line-height:1; }
+  .timeline-item ul { list-style:disc; margin:0; padding:0; }
+  .timeline-item li { margin-left:30px; font-size:20px; color:#454545; letter-spacing:-0.5px; line-height:28px; }
+  .timeline-item ul.single li { line-height:20px; }
+
+  /* ---------- 12 Labor Cost Efficiency ---------- */
+  .labor-cost { padding:120px 8.3%; gap:32px; background:#f5f5f5; }
+  .labor-wrap { display:flex; width:100%; max-width:1600px; gap:140px; align-items:center; flex-wrap:nowrap; justify-content:center; }
+  .donut-outer { display:contents; }
+  .donut-wrap { position:relative; width:600px; height:662px; flex-shrink:0; }
+  .donut { position:absolute; left:38px; top:116px; width:524px; height:524px; border-radius:50%;
+    background: conic-gradient(#d5d5d5 0% 3%, #559ce3 3% 60%, #1a237e 60% 100%); }
+  .donut::after { content:''; position:absolute; inset:145px; background:#f5f5f5; border-radius:50%; }
+  .donut-wrap .center-label { position:absolute; left:50%; top:339px; transform:translateX(-50%); text-align:center; color:#559ce3; white-space:nowrap; }
+  .donut-wrap .center-label .n { display:block; font-size:32px; font-weight:700; line-height:40px; letter-spacing:-0.8px; }
+  .donut-wrap .center-label .p { font-size:40px; font-weight:900; line-height:40px; letter-spacing:-1px; }
+  .donut-wrap .center-label .p em { font-style:normal; font-size:32px; font-weight:700; }
+  .donut-wrap .ext-label { position:absolute; text-align:center; font-size:20px; line-height:24px; white-space:nowrap; }
+  .donut-wrap .ext-label .p { display:block; margin-top:8px; font-size:32px; font-weight:900; letter-spacing:-0.8px; line-height:40px; }
+  .donut-wrap .ext-label .p em { font-style:normal; font-size:24px; font-weight:700; letter-spacing:-0.6px; }
+  .donut-wrap .ext-label.imad { top:20px; left:254.5px; transform:translateX(-50%); color:#666; }
+  .donut-wrap .ext-label.material { left:117.03px; top:330px; transform:translateX(-50%); color:#fff; }
+  .cost-table-wrap { width:860px; max-width:100%; }
+  .cost-table-scroll { width:100%; background:#fff; overflow-x:auto; }
+  .cost-table { border-collapse:collapse; font-size:18px; letter-spacing:-0.45px; width:100%; min-width:520px; }
+  .cost-table th, .cost-table td { height:72px; padding:0 14px; text-align:center; border-right:1px solid #eee; }
+  .cost-table th:last-child, .cost-table td:last-child { border-right:none; }
+  .cost-table th { height:70px; background:#d9d9d9; color:#151515; font-size:20px; font-weight:700; letter-spacing:-0.5px; }
+  .cost-table td { color:#454545; }
+  .cost-table td:first-child { color:#666; }
+  .cost-table tr:not(:first-child):not(:last-child) td { border-bottom:1px solid #eee; }
+  .cost-table tr:last-child td { background:rgba(228,238,248,.9); color:#559ce3; font-weight:700; }
+  .cost-table tr:last-child td:first-child { color:#559ce3; }
+  .cost-note { width:100%; display:flex; flex-direction:column; gap:0; padding:23px 0 0 10px; box-sizing:border-box; }
+  .cost-note p { font-size:16px; letter-spacing:-0.5px; line-height:24px; color:#1a237e; }
+  .cost-note p.gray { color:#999; }
+
+  /* ---------- 13 Investment Types ---------- */
+  .investment-types { padding:120px 8.3%; gap:32px; }
+  .invest-section { width:100%; max-width:1600px; padding-top:60px; display:flex; flex-direction:column; gap:32px; }
+  .invest-tt { display:flex; flex-direction:column; gap:24px; }
+  .invest-tt h4 { font-size:32px; font-weight:800; color:#151515; }
+  .invest-tt h4 .blue { color:#559ce3; }
+  .invest-tt .desc { font-size:20px; font-weight:400; color:#666; }
+  .invest-tables-row { display:flex; gap:32px; align-items:flex-start; flex-wrap:nowrap; }
+  .itable-col { display:flex; flex-direction:column; }
+  .itable { border-collapse:collapse; font-size:20px; }
+  .itable th { background:#edf6ff; color:#559ce3; font-weight:700; border:1px solid #d9d9d9; padding:20px 16px; }
+  .itable td { border:1px solid #d9d9d9; padding:20px 16px; text-align:center; }
+  .itable td.label { background:#f5f5f5; color:#151515; }
+  .itable td.label.blue { color:#559ce3; font-weight:600; }
+  .itable td.val { background:#fff; color:#454545; }
+  .itable td.val.blue { color:#559ce3; font-weight:600; }
+  .itable td.val.strike { color:#999; text-decoration:line-through; }
+  .itable td.note { background:#fff; color:#454545; }
+  .itable tr.sum td { background:#4a4b6a; color:#fff; font-weight:700; border-color:#4a4b6a; }
+  .invest-notes { padding-top:32px; text-align:left; color:#999; font-size:16px; letter-spacing:-0.5px; }
+  .invest-notes p { line-height:24px; }
+  .invest-note-single { margin-top:-32px; padding-top:32px; text-align:left; color:#454545; font-size:20px; letter-spacing:-0.5px; }
+
+  /* ---------- 14 Footer ---------- */
+  .footer { background:#151515; color:#999; padding:66px 8.3% 138px; }
+  .footer-row { width:100%; max-width:1600px; display:flex; align-items:flex-end; justify-content:space-between; gap:24px; flex-wrap:wrap; }
+  .footer-info { display:flex; flex-direction:column; gap:19px; width:745px; max-width:100%; }
+  .footer .company { color:#fff; font-weight:600; font-size:20px; line-height:20px; letter-spacing:0.0781px; }
+  .footer p { font-size:16px; line-height:20px; color:#fff; }
+  .footer-info p:nth-child(3) { line-height:16px; }
+  .footer p .gray { color:#999; }
+  .footer .copyright { font-size:16px; line-height:16px; color:#999; white-space:nowrap; }
+
+  @media (max-width:900px) {
+    .header-nav { padding:16px 20px; } .nav-items { display:none; }
+    .hero-tagline { font-size:14px; letter-spacing:4px; }
+    .promo-title, .stats .title, .feature-grid .title, .ai-solution .title,
+    .seasonal .title, .review-video .title, .premium-locations .title, .hybrid-store .title,
+    .customer-reviews .title, .tech-timeline .title, .labor-cost .title, .investment-types .title { font-size:30px; }
+    section { padding-left:20px !important; padding-right:20px !important; }
+    .labor-wrap, .timeline-wrap { flex-direction:column; }
+    .ai-panel { flex-direction:column-reverse; padding:24px !important; }
+    .ai-panel .text { position:static; max-width:100%; margin-bottom:16px; }
+    .ai-panel .imgs img { width:100%; }
+    .hybrid-wrap { position:static; padding-top:0; display:flex; flex-direction:column; gap:16px; }
+    .hybrid-wrap .photo { position:static; width:100%; height:auto; aspect-ratio:1060/600; }
+    .hybrid-wrap .panel { position:static; width:100%; height:auto; padding:32px 24px; }
+    .hybrid-wrap .dots { position:static; justify-content:center; }
+    .invest-tables-row { flex-direction:column; }
+    .footer-row { flex-direction:column; align-items:flex-start; }
+    .timeline-cols { min-width:0; flex-direction:column; gap:28px; }
+    .donut-outer { display:block; width:260px; height:287px; margin:0 auto; overflow:hidden; }
+    .donut-outer .donut-wrap { transform:scale(0.4333); transform-origin:top left; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- 01 Header + Hero -->
+  <section class="hero" id="top">
+    <video class="hero-bg" src="./assets/top_bg.mp4" poster="./assets/top_bg.jpg" autoplay muted loop playsinline></video>
+    <div class="header-nav">
+      <a href="#top"><img class="logo-mark" src="./assets/logo.png" alt="b;eat" style="height:30px;width:auto" /></a>
+      <div class="nav-items">
+        <a href="#s3"><p>브랜드소개</p></a>
+        <a href="#s4"><p>b;eat 경쟁력</p></a>
+        <a href="#s8"><p>도입상권소개</p></a>
+        <a href="#s13"><p>도입안내</p></a>
+        <a href="https://www.beatcorp.io" target="_blank" rel="noopener noreferrer"><p>회사소개</p></a>
+        <a class="cta-btn" href="https://beatcorp.imweb.me/Request" target="_blank" rel="noopener noreferrer"><p>상담신청</p></a>
+      </div>
+    </div>
+    <div class="hero-content">
+      <div class="hero-title">
+        <img src="./assets/main_tt1.png" alt="(beyond) basics," style="max-width:961px;width:50%;min-width:280px;height:auto;display:block" />
+        <img src="./assets/main_tt2.png" alt="(better) balance." style="max-width:961px;width:50%;min-width:280px;height:auto;display:block" />
+      </div>
+      <p class="hero-tagline">기본을 넘어, 그 이상의 밸런스</p>
+    </div>
+  </section>
+
+  <!-- 02 Promo Banner -->
+  <section class="promo-banner" id="s2">
+    <div class="promo-badge">비트 10주년 기념! 특별 혜택</div>
+    <div class="promo-title">
+      <p><span class="white">선착순 </span><span class="dark">10대 한정</span></p>
+      <p><span class="dark">1,000만원</span><span class="white"> 도입비 즉시 지원!</span></p>
+    </div>
+    <div class="promo-cards">
+      <div class="promo-card"><div class="card-body">
+        <p class="card-label">설치비 지원</p>
+        <div class="card-price"><p class="price-old">385<span class="unit">만원</span><img class="strike" src="./assets/s2-strike.svg" alt="" /></p><p class="price-new">0<span class="unit">원</span></p></div>
+      </div><div class="num">1</div></div>
+      <div class="promo-card"><div class="card-body">
+        <p class="card-label">키오스크 지원</p>
+        <div class="card-price"><p class="price-old">385<span class="unit">만원</span><img class="strike" src="./assets/s2-strike.svg" alt="" /></p><p class="price-new">0<span class="unit">원</span></p></div>
+      </div><div class="num">2</div></div>
+      <div class="promo-card"><div class="card-body">
+        <p class="card-label">교육비 면제</p>
+        <div class="card-price"><p class="price-old">110<span class="unit">만원</span><img class="strike" src="./assets/s2-strike.svg" alt="" /></p><p class="price-new">0<span class="unit">원</span></p></div>
+      </div><div class="num">3</div></div>
+      <div class="promo-card"><div class="card-body">
+        <p class="card-label">초도 물품 지원</p>
+        <div class="card-price"><p class="price-old">120<span class="unit">만원</span><img class="strike" src="./assets/s2-strike.svg" alt="" /></p><p class="price-new">0<span class="unit">원</span></p></div>
+      </div><div class="num">4</div></div>
+    </div>
+  </section>
+
+  <!-- 03 Stats -->
+  <section class="stats" id="s3">
+    <img class="stats-photo" src="./assets/s3_bg.jpg" alt="" style="opacity:1" />
+    <div class="scrim"></div>
+    <div class="content">
+      <div class="title"><p class="white">최초 시작, 최다 설치</p><p><span class="white">로봇카페</span> <span class="blue">전국 누적 330대</span></p></div>
+      <div class="graph-area">
+        <div class="graph-wrap"><img src="./assets/s3_graphe.png" alt="누적 설치 그래프" /></div>
+        <div class="sub-text">
+          <p class="l1">1세대 30대, 2세대 50대, 3세대 200대 이상</p>
+          <p class="l1">MULTIPLE 판매 성장!</p>
+          <p class="l3">(2026.05 기준)</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 Tech Feature Grid -->
+  <section class="feature-grid" id="s4">
+    <div class="title"><p>기술과 운영으로 완성한</p><p class="blue">차별화된 스마트 로봇카페</p></div>
+    <div class="sub-text"><p>제조 · 고객 경험 · 매장 운영 · 고객 관리까지</p><p>하나로 연결된 비트만의 스마트 솔루션</p></div>
+    <div class="feature-rows">
+      <div class="feature-row">
+        <div class="feature-card"><div class="img-wrap"><img src="./assets/s4_img1.jpg" /></div>
+          <div class="f-title"><span class="dark">커피머신, 제빙기 고퀄리티</span><span class="blue">동시 병렬 제조</span></div>
+          <div class="f-desc"><span>최고급 듀얼 머신으로 주문이 몰려도 최대 5잔 동시 제조</span><span>단 시간 제조 잔 수 극대화, 2~3인 인건비 소화 가능</span></div></div>
+        <div class="feature-card"><div class="img-wrap"><img src="./assets/s4_img2.jpg" /></div>
+          <div class="f-title"><span class="dark">고객 반응형</span><span class="blue">헤드 디스플레이</span></div>
+          <div class="f-desc"><span>비트만의 시그니처!</span><span>재미있는 로봇 표정으로 고객 호객 행위 효과 검증</span></div></div>
+        <div class="feature-card"><div class="img-wrap"><img src="./assets/s4_img3.jpg" /></div>
+          <div class="f-title"><span class="dark">한국커피협회 공식 인증</span><span class="blue">국내 최초 로보리스타</span></div>
+          <div class="f-desc"><span>한국커피협회로부터 업계 최초</span><span>로보리스타(ROBORISTA) 자격 공식 취득</span></div></div>
+      </div>
+      <div class="feature-row">
+        <div class="feature-card"><div class="img-wrap"><img src="./assets/s4_img4.jpg" /></div>
+          <div class="f-title"><span class="blue">CCTV 원격 관제 서비스</span><span class="dark">안정적 운영 지원</span></div>
+          <div class="f-desc"><span>클라우드 카메라 기반 주 7일 원격관제를 통해</span><span>매장 이슈 발생 시 신속한 확인 및 대응 지원</span></div></div>
+        <div class="feature-card"><div class="img-wrap"><img src="./assets/s4_img5.jpg" /></div>
+          <div class="f-title"><span class="dark">체계적인 운영 시스템</span><span class="blue">효율적 관리 지원</span></div>
+          <div class="f-desc"><span>매장 맞춤형 매뉴얼 제공을 통해</span><span>정교한 관리 지원으로 휴면 에러 방지</span></div></div>
+        <div class="feature-card"><div class="img-wrap"><img src="./assets/s4_img6.jpg" /></div>
+          <div class="f-title"><span class="blue">간편 주문 APP</span><span class="dark">앱 가입 회원 30만명</span></div>
+          <div class="f-desc"><span>매장 특성 기반 쿠폰 마케팅 및 프로모션으로</span><span>충성 고객 확보 가능</span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 05 i-MAD AI Solution -->
+  <section class="ai-solution">
+    <div class="title"><p>세계 최초 AI 매장 운영 솔루션</p><p><span class="dark">비트 자체 개발 </span><span class="blue">i-MAD</span></p></div>
+    <div class="ai-tabs">
+      <div class="ai-tab active" onclick="showAiTab(0,this)">AI 대시보드</div>
+      <div class="ai-tab" onclick="showAiTab(1,this)">AI 자동발주</div>
+      <div class="ai-tab" onclick="showAiTab(2,this)">AI 마케팅기능</div>
+    </div>
+    <div class="ai-panel">
+      <div class="imgs"><img id="ai-tab-img" src="./assets/tab_img1.jpg" /></div>
+      <div class="text">
+        <p class="eyebrow" id="ai-eyebrow">매장 현황이 한 눈에!</p>
+        <p class="headline" id="ai-headline">실시간 지표 및<br>실적 분석 보고서</p>
+        <div class="desc" id="ai-desc">
+          <p>매장 운영에 관한 전반적인 현황을 포함하여</p>
+          <p>매출, 판매 잔 수, 마케팅 효과 등</p>
+          <p>주요 실적 분석 보고서를 시각화 하여 제공</p>
+        </div>
+      </div>
+    </div>
+    <script>
+      const aiTabData = [
+        { img:'./assets/tab_img1.jpg', eyebrow:'매장 현황이 한 눈에!', headline:'실시간 지표 및<br>실적 분석 보고서',
+          desc:['매장 운영에 관한 전반적인 현황을 포함하여','매출, 판매 잔 수, 마케팅 효과 등','주요 실적 분석 보고서를 시각화 하여 제공'] },
+        { img:'./assets/tab_img2.jpg', eyebrow:'원자재 발주 알아서 척척!', headline:'원자재 수요 예측<br>→ 자동 발주',
+          desc:['매장의 원자재 보관함의 로드셀 무게를 기준으로','운영 가능 시간, 제조 가능 잔 수, 사전 결품 판단,','과거 판매 잔 수와 날씨, 요일, 위치 정보를 바탕으로','수요 예측 및 물류 자동 발주 지원'] },
+        { img:'./assets/tab_img3.jpg', eyebrow:'자동으로 단골 만들기!', headline:'마케팅 자동화 지원',
+          desc:['매장과 고객의 성향을 분석하여 재방문 활성, 매출 활성,','특정 메뉴의 판매 활성 등의 쿠폰 성향에 따라','정밀 대상 마케팅 자동화 기능 제공'] },
+      ];
+      function showAiTab(idx, el){
+        document.querySelectorAll('.ai-tab').forEach(t=>t.classList.remove('active'));
+        el.classList.add('active');
+        const d = aiTabData[idx];
+        document.getElementById('ai-tab-img').src = d.img;
+        document.getElementById('ai-eyebrow').textContent = d.eyebrow;
+        document.getElementById('ai-headline').innerHTML = d.headline;
+        document.getElementById('ai-desc').innerHTML = d.desc.map(p=>`<p>${p}</p>`).join('');
+      }
+    </script>
+  </section>
+
+  <!-- 06 Seasonal Menu -->
+  <section class="seasonal">
+    <div class="title"><span>시즌별 </span><span class="blue">신메뉴 개발</span></div>
+    <div class="sub-text">지속적인 신메뉴 출시를 통해 고객의 관심과 재방문을 유도</div>
+    <div class="poster-row">
+      <div class="poster-track">
+        <img src="./assets/s6_01.jpg" /><img src="./assets/s6_02.jpg" /><img src="./assets/s6_03.jpg" />
+        <img src="./assets/s6_04.jpg" /><img src="./assets/s6_05.jpg" /><img src="./assets/s6_06.jpg" /><img src="./assets/s6_07.jpg" /><img src="./assets/s6_08.jpg" />
+        <img src="./assets/s6_01.jpg" aria-hidden="true" /><img src="./assets/s6_02.jpg" aria-hidden="true" /><img src="./assets/s6_03.jpg" aria-hidden="true" />
+        <img src="./assets/s6_04.jpg" aria-hidden="true" /><img src="./assets/s6_05.jpg" aria-hidden="true" /><img src="./assets/s6_06.jpg" aria-hidden="true" /><img src="./assets/s6_07.jpg" aria-hidden="true" /><img src="./assets/s6_08.jpg" aria-hidden="true" />
+      </div>
+    </div>
+  </section>
+
+  <script>
+    // Shared infinite auto-scroll carousel used by S8 (locations) and S10 (reviews).
+    function initInfiniteCarousel({ carousel, track, dupStart, direction, speed = 36, thumb, trackBg, pauseOnHover = false, initOffset = false }){
+      const firstCard = track.children[0];
+      let shiftAmount = 0, startPoint = 0, resetPoint = 0, autoScroll = true, resumeTimer = null, lastTime = null, positioned = false;
+
+      function measure(){
+        startPoint = firstCard.offsetLeft;
+        resetPoint = dupStart.offsetLeft;
+        shiftAmount = resetPoint - startPoint;
+        if (initOffset && !positioned && shiftAmount > 0) {
+          carousel.scrollLeft = startPoint + shiftAmount;
+          positioned = true;
+        }
+      }
+      measure();
+      window.addEventListener('resize', measure);
+
+      function frame(ts){
+        if (lastTime === null) lastTime = ts;
+        const dt = Math.min(0.1, (ts - lastTime) / 1000);
+        lastTime = ts;
+        if (autoScroll) carousel.scrollLeft += direction * speed * dt;
+        if (shiftAmount > 0) {
+          if (direction > 0) {
+            while (carousel.scrollLeft >= resetPoint) carousel.scrollLeft -= shiftAmount;
+            while (carousel.scrollLeft < startPoint) carousel.scrollLeft += shiftAmount;
+          } else {
+            while (carousel.scrollLeft <= startPoint) carousel.scrollLeft += shiftAmount;
+            while (carousel.scrollLeft > resetPoint) carousel.scrollLeft -= shiftAmount;
+          }
+        }
+        if (shiftAmount > 0 && thumb && trackBg) {
+          const progress = ((carousel.scrollLeft % shiftAmount) + shiftAmount) % shiftAmount / shiftAmount;
+          const thumbWidthRatio = Math.min(1, carousel.clientWidth / shiftAmount);
+          const bgWidth = trackBg.clientWidth;
+          const thumbWidth = bgWidth * thumbWidthRatio;
+          thumb.style.width = thumbWidth + 'px';
+          thumb.style.left = (progress * (bgWidth - thumbWidth)) + 'px';
+        }
+        requestAnimationFrame(frame);
+      }
+      requestAnimationFrame(frame);
+
+      if (pauseOnHover) {
+        carousel.addEventListener('mouseenter', () => { autoScroll = false; });
+        carousel.addEventListener('mouseleave', () => { clearTimeout(resumeTimer); autoScroll = true; });
+      }
+
+      return {
+        scrollByStep(dir, step){
+          autoScroll = false;
+          clearTimeout(resumeTimer);
+          resumeTimer = setTimeout(() => { autoScroll = true; }, 3000);
+          carousel.scrollBy({ left: dir * step, behavior:'smooth' });
+        }
+      };
+    }
+  </script>
+
+  <!-- 07 Operator Review Video -->
+  <section class="review-video">
+    <div class="title">실제 운영자 리뷰 보기</div>
+    <div class="stars">★★★★★</div>
+    <div class="video-wrap"><iframe src="https://www.youtube.com/embed/buD2SlT9jcI?si=ufezlut82T77ON8c" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
+  </section>
+
+  <!-- 08 Premium Locations -->
+  <section class="premium-locations" id="s8">
+    <div class="title"><p><span>어느 곳에서나 </span><span class="blue">프리미엄 하이엔드</span></p><p>24시 로봇카페 b;eat</p></div>
+    <div class="sub-text"><p>무인 카페 솔루션 및 편의 기능을 적용하여 자유롭게 운영할 수 있으며,</p><p>공간별 맞춤형 부가 수익 창출이 가능</p></div>
+    <div class="loc-carousel" id="loc-carousel">
+      <div class="loc-track" id="loc-track">
+        <div class="location-card"><div class="img-wrap"><img src="./assets/s8_01.jpg" /></div>
+          <div class="cat">기업 <span class="en">Corporate</span></div>
+          <div class="desc"><span>24시간 지치지 않는 사내 바리스타, 임직원의</span><span>워라밸을 높이는 가장 스마트한 사내 복지</span></div></div>
+        <div class="location-card"><div class="img-wrap"><img src="./assets/s8_02.jpg" /></div>
+          <div class="cat">공공기관 <span class="en">Public Institutions</span></div>
+          <div class="desc"><span>시민에게는 혁신적인 스마트 쉼터를, 관리자에게는</span><span>투명하고 편리한 무인 운영을 제공하는 공간</span></div></div>
+        <div class="location-card"><div class="img-wrap"><img src="./assets/s8_03.jpg" /></div>
+          <div class="cat">휴게소 <span class="en">Rest Areas</span></div>
+          <div class="desc"><span>심야에도 멈추지 않는 프리미엄 커피,</span><span>운전자의 피로를 깨우는 24시간 오아시스</span></div></div>
+        <div class="location-card"><div class="img-wrap"><img src="./assets/s8_04.jpg" /></div>
+          <div class="cat">아파트 <span class="en">Apartments</span></div>
+          <div class="desc"><span>우리 아파트의 품격을 한 단계 높여주는,</span><span>입주민 전용 24시간 프리미엄 라운지</span></div></div>
+        <div class="location-card"><div class="img-wrap"><img src="./assets/s8_05.jpg" /></div>
+          <div class="cat">병원 <span class="en">Hospitals</span></div>
+          <div class="desc"><span>보호자와 의료진을 위한 24시간 힐링 베이스,</span><span>비대면 로봇 기술로 위생과 안심까지 챙긴 공간</span></div></div>
+        <div class="location-card"><div class="img-wrap"><img src="./assets/s8_06.jpg" /></div>
+          <div class="cat">대학교 <span class="en">Universities</span></div>
+          <div class="desc"><span>밤샘 도서관에도 든든한 지원군, 학생들의 템포에</span><span>맞춘 24시간 캠퍼스 스마트 카페</span></div></div>
+        <div class="location-card"><div class="img-wrap"><img src="./assets/s8_07.jpg" /></div>
+          <div class="cat">호텔 <span class="en">Hotels</span></div>
+          <div class="desc"><span>투숙객의 이른 아침과 늦은 밤을 완벽하게 책임지는</span><span>하이엔드 무인 로비 라운지</span></div></div>
+        <div class="location-card"><div class="img-wrap"><img src="./assets/s8_08.jpg" /></div>
+          <div class="cat">샵인샵 <span class="en">Shop-in-Shop</span></div>
+          <div class="desc"><span>기존 매장 속 1.5평의 마법, 추가 인건비 없이</span><span>빈 공간을 살리는 새로운 수익 창출구</span></div></div>
+        <div class="location-card"><div class="img-wrap"><img src="./assets/s8_09.jpg" /></div>
+          <div class="cat">로드샵 <span class="en">Road Shop</span></div>
+          <div class="desc"><span>인건비와 인력 관리 스트레스 제로, 24시간 스스로</span><span>일하며 수익을 만들어내는 무인 매장</span></div></div>
+        <div class="location-card" id="loc-dup-start"><div class="img-wrap"><img src="./assets/s8_01.jpg" /></div>
+          <div class="cat">기업 <span class="en">Corporate</span></div>
+          <div class="desc"><span>24시간 지치지 않는 사내 바리스타, 임직원의</span><span>워라밸을 높이는 가장 스마트한 사내 복지</span></div></div>
+        <div class="location-card"><div class="img-wrap"><img src="./assets/s8_02.jpg" /></div>
+          <div class="cat">공공기관 <span class="en">Public Institutions</span></div>
+          <div class="desc"><span>시민에게는 혁신적인 스마트 쉼터를, 관리자에게는</span><span>투명하고 편리한 무인 운영을 제공하는 공간</span></div></div>
+        <div class="location-card"><div class="img-wrap"><img src="./assets/s8_03.jpg" /></div>
+          <div class="cat">휴게소 <span class="en">Rest Areas</span></div>
+          <div class="desc"><span>심야에도 멈추지 않는 프리미엄 커피,</span><span>운전자의 피로를 깨우는 24시간 오아시스</span></div></div>
+        <div class="location-card"><div class="img-wrap"><img src="./assets/s8_04.jpg" /></div>
+          <div class="cat">아파트 <span class="en">Apartments</span></div>
+          <div class="desc"><span>우리 아파트의 품격을 한 단계 높여주는,</span><span>입주민 전용 24시간 프리미엄 라운지</span></div></div>
+        <div class="location-card"><div class="img-wrap"><img src="./assets/s8_05.jpg" /></div>
+          <div class="cat">병원 <span class="en">Hospitals</span></div>
+          <div class="desc"><span>보호자와 의료진을 위한 24시간 힐링 베이스,</span><span>비대면 로봇 기술로 위생과 안심까지 챙긴 공간</span></div></div>
+        <div class="location-card"><div class="img-wrap"><img src="./assets/s8_06.jpg" /></div>
+          <div class="cat">대학교 <span class="en">Universities</span></div>
+          <div class="desc"><span>밤샘 도서관에도 든든한 지원군, 학생들의 템포에</span><span>맞춘 24시간 캠퍼스 스마트 카페</span></div></div>
+        <div class="location-card"><div class="img-wrap"><img src="./assets/s8_07.jpg" /></div>
+          <div class="cat">호텔 <span class="en">Hotels</span></div>
+          <div class="desc"><span>투숙객의 이른 아침과 늦은 밤을 완벽하게 책임지는</span><span>하이엔드 무인 로비 라운지</span></div></div>
+        <div class="location-card"><div class="img-wrap"><img src="./assets/s8_08.jpg" /></div>
+          <div class="cat">샵인샵 <span class="en">Shop-in-Shop</span></div>
+          <div class="desc"><span>기존 매장 속 1.5평의 마법, 추가 인건비 없이</span><span>빈 공간을 살리는 새로운 수익 창출구</span></div></div>
+        <div class="location-card"><div class="img-wrap"><img src="./assets/s8_09.jpg" /></div>
+          <div class="cat">로드샵 <span class="en">Road Shop</span></div>
+          <div class="desc"><span>인건비와 인력 관리 스트레스 제로, 24시간 스스로</span><span>일하며 수익을 만들어내는 무인 매장</span></div></div>
+      </div>
+    </div>
+    <div class="loc-scrollbar">
+      <div class="loc-track-bg"><div class="loc-thumb" id="loc-thumb"></div></div>
+      <div class="loc-arrows">
+        <button class="loc-arrow" onclick="locArrowScroll(-1)" aria-label="이전"><img src="./assets/s8-arrow-prev.png" alt="이전" /></button>
+        <button class="loc-arrow" onclick="locArrowScroll(1)" aria-label="다음"><img src="./assets/s8-arrow-next.png" alt="다음" /></button>
+      </div>
+    </div>
+    <script>
+      (function(){
+        const locCarousel = initInfiniteCarousel({
+          carousel: document.getElementById('loc-carousel'),
+          track: document.getElementById('loc-track'),
+          dupStart: document.getElementById('loc-dup-start'),
+          direction: 1,
+          thumb: document.getElementById('loc-thumb'),
+          trackBg: document.querySelector('.loc-track-bg'),
+          pauseOnHover: true,
+        });
+        window.locArrowScroll = (dir) => locCarousel.scrollByStep(dir, 388 + 32);
+      })();
+    </script>
+  </section>
+
+  <!-- 09 Hybrid Store -->
+  <section class="hybrid-store">
+    <div class="hybrid-inner">
+      <div class="title"><p><span>유·무인 </span><span class="blue">하이브리드 매장</span></p><p>비트카페 야탑역점</p></div>
+      <div class="hybrid-wrap">
+        <div class="photo"><img id="hybrid-main-photo" src="./assets/s9_beatcafe1.jpg" /></div>
+        <div class="panel">
+          <div class="panel-inner">
+            <div class="main-text">
+              <p>b;eat와 사람의 협동 매장</p>
+              <p>최소 인력, 최적의 시너지 효과</p>
+            </div>
+            <div class="sub-text-block">
+              <p>로봇커피와 협동으로 일부 시간대 유인 운영으로 베이커리 등</p>
+              <p>부가 콘텐츠로 매출을 다각화하는 스마트한 F&amp;B 솔루션</p>
+            </div>
+            <div class="sub-text-block">
+              <p>배달 서비스 대응 가능하여 오프라인 매출 외에</p>
+              <p>온라인 배달 채널을 통한 추가 수익 창출 가능</p>
+            </div>
+          </div>
+        </div>
+        <div class="dots">
+          <button class="dot active" onclick="setHybridPhoto(0,this)"></button>
+          <button class="dot" onclick="setHybridPhoto(1,this)"></button>
+          <button class="dot" onclick="setHybridPhoto(2,this)"></button>
+        </div>
+      </div>
+    </div>
+    <script>
+      const hybridPhotos = ['./assets/s9_beatcafe1.jpg','./assets/s9_beatcafe2.jpg','./assets/s9_beatcafe3.jpg'];
+      let hybridIndex = 0;
+      let hybridTimer = null;
+
+      function setHybridPhoto(idx, el){
+        hybridIndex = idx;
+        document.getElementById('hybrid-main-photo').src = hybridPhotos[idx];
+        document.querySelectorAll('.hybrid-wrap .dot').forEach(d=>d.classList.remove('active'));
+        el.classList.add('active');
+        restartHybridAutoRoll();
+      }
+
+      function restartHybridAutoRoll(){
+        clearInterval(hybridTimer);
+        hybridTimer = setInterval(() => {
+          const dots = document.querySelectorAll('.hybrid-wrap .dot');
+          const nextIdx = (hybridIndex + 1) % hybridPhotos.length;
+          setHybridPhoto(nextIdx, dots[nextIdx]);
+        }, 4000);
+      }
+      restartHybridAutoRoll();
+    </script>
+  </section>
+
+  <!-- 10 Customer Reviews -->
+  <section class="customer-reviews">
+    <div class="title"><span>방문 고객 </span><span class="blue">리얼 후기</span></div>
+    <div class="sub-text">비트카페를 직접 이용하신 고객들의 100% 솔직한 리뷰</div>
+    <div class="reviews-group">
+      <div class="clip-carousel">
+        <div class="clip-track">
+          <div class="clip-card"><a href="https://naver.me/5FDNtP5h" target="_blank" rel="noopener noreferrer"><img src="./assets/s10-clip1.png" /></a></div>
+          <div class="clip-card"><a href="https://m.blog.naver.com/harilog811/clip/14808230" target="_blank" rel="noopener noreferrer"><img src="./assets/s10-clip2.png" /></a></div>
+          <div class="clip-card"><a href="https://naver.me/FHOJKxmX" target="_blank" rel="noopener noreferrer"><img src="./assets/s10-clip3.png" /></a></div>
+          <div class="clip-card"><a href="https://naver.me/551GaZOj" target="_blank" rel="noopener noreferrer"><img src="./assets/s10-clip4.png" /></a></div>
+          <div class="clip-card"><a href="https://naver.me/xbKzyPHv" target="_blank" rel="noopener noreferrer"><img src="./assets/s10-clip5.png" /></a></div>
+          <div class="clip-card"><a href="https://naver.me/GKI3aLZB" target="_blank" rel="noopener noreferrer"><img src="./assets/s10-clip6.png" /></a></div>
+          <div class="clip-card" aria-hidden="true"><a href="https://naver.me/5FDNtP5h" target="_blank" rel="noopener noreferrer" tabindex="-1"><img src="./assets/s10-clip1.png" /></a></div>
+          <div class="clip-card" aria-hidden="true"><a href="https://m.blog.naver.com/harilog811/clip/14808230" target="_blank" rel="noopener noreferrer" tabindex="-1"><img src="./assets/s10-clip2.png" /></a></div>
+          <div class="clip-card" aria-hidden="true"><a href="https://naver.me/FHOJKxmX" target="_blank" rel="noopener noreferrer" tabindex="-1"><img src="./assets/s10-clip3.png" /></a></div>
+          <div class="clip-card" aria-hidden="true"><a href="https://naver.me/551GaZOj" target="_blank" rel="noopener noreferrer" tabindex="-1"><img src="./assets/s10-clip4.png" /></a></div>
+          <div class="clip-card" aria-hidden="true"><a href="https://naver.me/xbKzyPHv" target="_blank" rel="noopener noreferrer" tabindex="-1"><img src="./assets/s10-clip5.png" /></a></div>
+          <div class="clip-card" aria-hidden="true"><a href="https://naver.me/GKI3aLZB" target="_blank" rel="noopener noreferrer" tabindex="-1"><img src="./assets/s10-clip6.png" /></a></div>
+        </div>
+      </div>
+      <div class="reviews-row" id="review-carousel">
+      <div class="reviews-track" id="review-track">
+        <div class="review-card"><div class="img-wrap"><img src="./assets/s9_review1.jpg" /></div>
+          <div class="body"><div class="badge"><img src="./assets/s10-baemin-badge.png" alt="배달의민족" /></div><div class="stars-sm"><img src="./assets/s10-stars.svg" alt="5점" /></div><div class="txt">커피 맛이 훌륭합니다!!</div></div></div>
+        <div class="review-card"><div class="img-wrap"><img src="./assets/s10-review7.png" /></div>
+          <div class="body"><div class="badge"><img src="./assets/s10-baemin-badge.png" alt="배달의민족" /></div><div class="stars-sm"><img src="./assets/s10-stars.svg" alt="5점" /></div><div class="txt">처음 시켜보는데 다 맛있었어요! 특히 쑥인절미케이크 많이 달지도 않고 제 스타일이네용~~다음에 또 시킬게요</div></div></div>
+        <div class="review-card"><div class="img-wrap"><img src="./assets/s9_review2.jpg" /></div>
+          <div class="body"><div class="badge"><img src="./assets/s10-baemin-badge.png" alt="배달의민족" /></div><div class="stars-sm"><img src="./assets/s10-stars.svg" alt="5점" /></div><div class="txt">비트카페 나의 빛... 나의 행복... 나의 평화 오늘도 역시나 맛있었습니다</div></div></div>
+        <div class="review-card"><div class="img-wrap"><img src="./assets/s9_review3.jpg" /></div>
+          <div class="body"><div class="badge"><img src="./assets/s10-baemin-badge.png" alt="배달의민족" /></div><div class="stars-sm"><img src="./assets/s10-stars.svg" alt="5점" /></div><div class="txt lg">오 케익 되게 커요 초코달달하니 넘 맛있네요</div></div></div>
+        <div class="review-card"><div class="img-wrap"><img src="./assets/s9_review4.jpg" /></div>
+          <div class="body"><div class="badge"><img src="./assets/s10-baemin-badge.png" alt="배달의민족" /></div><div class="stars-sm"><img src="./assets/s10-stars.svg" alt="5점" /></div><div class="txt">처음 주문해봤는데, 구성이 너무 좋아요! 자주 시켜먹어야겠어요!</div></div></div>
+        <div class="review-card"><div class="img-wrap"><img src="./assets/s9_review5.jpg" /></div>
+          <div class="body"><div class="badge"><img src="./assets/s10-baemin-badge.png" alt="배달의민족" /></div><div class="stars-sm"><img src="./assets/s10-stars.svg" alt="5점" /></div><div class="txt">케익 맛있어요 저는 풍신한 케이크 좋아해서 쑥케이크가 맛있네요</div></div></div>
+        <div class="review-card"><div class="img-wrap"><img src="./assets/s9_review6.jpg" /></div>
+          <div class="body"><div class="badge"><img src="./assets/s10-baemin-badge.png" alt="배달의민족" /></div><div class="stars-sm"><img src="./assets/s10-stars.svg" alt="5점" /></div><div class="txt">당근케이크 좋아해서 이곳저곳 다 먹어보는데 여기완전 맛있어요..!! 담에 또 주문해서 먹을거에요</div></div></div>
+        <div class="review-card" id="review-dup-start"><div class="img-wrap"><img src="./assets/s9_review1.jpg" /></div>
+          <div class="body"><div class="badge"><img src="./assets/s10-baemin-badge.png" alt="배달의민족" /></div><div class="stars-sm"><img src="./assets/s10-stars.svg" alt="5점" /></div><div class="txt">커피 맛이 훌륭합니다!!</div></div></div>
+        <div class="review-card"><div class="img-wrap"><img src="./assets/s10-review7.png" /></div>
+          <div class="body"><div class="badge"><img src="./assets/s10-baemin-badge.png" alt="배달의민족" /></div><div class="stars-sm"><img src="./assets/s10-stars.svg" alt="5점" /></div><div class="txt">처음 시켜보는데 다 맛있었어요! 특히 쑥인절미케이크 많이 달지도 않고 제 스타일이네용~~다음에 또 시킬게요</div></div></div>
+        <div class="review-card"><div class="img-wrap"><img src="./assets/s9_review2.jpg" /></div>
+          <div class="body"><div class="badge"><img src="./assets/s10-baemin-badge.png" alt="배달의민족" /></div><div class="stars-sm"><img src="./assets/s10-stars.svg" alt="5점" /></div><div class="txt">비트카페 나의 빛... 나의 행복... 나의 평화 오늘도 역시나 맛있었습니다</div></div></div>
+        <div class="review-card"><div class="img-wrap"><img src="./assets/s9_review3.jpg" /></div>
+          <div class="body"><div class="badge"><img src="./assets/s10-baemin-badge.png" alt="배달의민족" /></div><div class="stars-sm"><img src="./assets/s10-stars.svg" alt="5점" /></div><div class="txt lg">오 케익 되게 커요 초코달달하니 넘 맛있네요</div></div></div>
+        <div class="review-card"><div class="img-wrap"><img src="./assets/s9_review4.jpg" /></div>
+          <div class="body"><div class="badge"><img src="./assets/s10-baemin-badge.png" alt="배달의민족" /></div><div class="stars-sm"><img src="./assets/s10-stars.svg" alt="5점" /></div><div class="txt">처음 주문해봤는데, 구성이 너무 좋아요! 자주 시켜먹어야겠어요!</div></div></div>
+        <div class="review-card"><div class="img-wrap"><img src="./assets/s9_review5.jpg" /></div>
+          <div class="body"><div class="badge"><img src="./assets/s10-baemin-badge.png" alt="배달의민족" /></div><div class="stars-sm"><img src="./assets/s10-stars.svg" alt="5점" /></div><div class="txt">케익 맛있어요 저는 풍신한 케이크 좋아해서 쑥케이크가 맛있네요</div></div></div>
+        <div class="review-card"><div class="img-wrap"><img src="./assets/s9_review6.jpg" /></div>
+          <div class="body"><div class="badge"><img src="./assets/s10-baemin-badge.png" alt="배달의민족" /></div><div class="stars-sm"><img src="./assets/s10-stars.svg" alt="5점" /></div><div class="txt">당근케이크 좋아해서 이곳저곳 다 먹어보는데 여기완전 맛있어요..!! 담에 또 주문해서 먹을거에요</div></div></div>
+      </div>
+      </div>
+    </div>
+    <script>
+      (function(){
+        initInfiniteCarousel({
+          carousel: document.getElementById('review-carousel'),
+          track: document.getElementById('review-track'),
+          dupStart: document.getElementById('review-dup-start'),
+          direction: -1,
+          initOffset: true,
+        });
+      })();
+    </script>
+  </section>
+
+  <!-- 11 Tech Timeline -->
+  <section class="tech-timeline">
+    <div class="title"><p>지속적인 기술 혁신으로 완성한</p><p class="blue">비트의 경쟁력</p></div>
+    <div class="sub-text">2016년부터 축적해온 로봇·AI·운영 자동화 기술을 기반으로 지속적인 기술 혁신</div>
+    <div class="timeline-wrap">
+      <div class="timeline-badge">
+        <img src="./assets/s11-patent.png" alt="기술 특허 등록 24건" />
+      </div>
+      <div class="timeline-cols">
+        <div class="timeline-col">
+          <div class="timeline-item"><div class="year">2017</div><ul><li>커피 제조 장치 및 동작 방법 관리자</li><li>단말 이벤트 통지 기술</li></ul></div>
+          <div class="timeline-item"><div class="year">2018</div><ul class="single"><li>무인 커피 음료 제조 머신 주문 처리 장치</li></ul></div>
+          <div class="timeline-item"><div class="year">2019</div><ul class="single"><li>커피 제조 머신 기반 주문 처리 기술</li></ul></div>
+          <div class="timeline-item"><div class="year">2021</div><ul class="single"><li>날씨ㆍ기상 데이터 기반 커피 메뉴 추천 기술</li></ul></div>
+          <div class="timeline-item"><div class="year">2020</div><ul><li>컵 디스펜서</li><li>오류 발생 통보 자동 커피</li><li>제조 장치 제스처 기반 터치스크린 주문 기술</li></ul></div>
+          <div class="timeline-item"><div class="year">2023</div><ul class="single"><li>무인 매장 출입 고객 모니터링 기술</li></ul></div>
+        </div>
+        <div class="timeline-col">
+          <div class="timeline-item"><div class="year">2024</div><ul>
+            <li>무인 매장 운영 정보 생성</li><li>정량 제조 자동 캘리브레이션</li>
+            <li>로봇 상태 기반 인터랙션</li><li>카드 결제 자동 부분 취소</li>
+            <li>병렬 제조 로직</li><li>음료 첨가물 디스펜서</li>
+            <li>자재 사용량ㆍ수요 예측 발주</li><li>기후ㆍ취향 기반 개인화 제조</li>
+          </ul></div>
+          <div class="timeline-item"><div class="year">2025</div><ul><li>전국 총 330대 누적 설치</li><li>고속도로 휴게소 40여대 운영 중</li><li>전국 주요 기업, 아파트, 로드샵 운영</li></ul></div>
+          <div class="timeline-item"><div class="year">2026</div><ul><li>일본 수출 확정</li><li>글로벌 시장 (미국 등) 진출 협의 중</li></ul></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 12 Labor Cost Efficiency -->
+  <section class="labor-cost">
+    <div class="title"><p>인건비 부담은 최소화,</p><p class="blue">운영 효율은 극대화</p></div>
+    <div class="sub-text">다양한 상권에서 다년간 운영으로 검증을 마친 무인 수익 모델</div>
+    <div class="labor-wrap">
+      <div class="donut-outer">
+      <div class="donut-wrap">
+        <div class="donut"></div>
+        <div class="ext-label imad">i-MAD 이용료<br>(AI 매장운영 OS)<span class="p">3<em>%</em></span></div>
+        <div class="ext-label material">원부자재<br>(평균)<span class="p">40<em>%</em></span></div>
+        <div class="center-label"><span class="n">수익</span><span class="p">57<em>%</em></span></div>
+      </div>
+      </div>
+      <div class="cost-table-wrap">
+      <div class="cost-table-scroll">
+      <table class="cost-table">
+        <tr><th></th><th>A 매장</th><th>B 매장</th><th>C 매장</th></tr>
+        <tr><td>판매 잔 수(월)</td><td>4,260</td><td>5,250</td><td>9,300</td></tr>
+        <tr><td>순 매출 (부가세, 결제 수수료 제외)</td><td>₩9,341,018</td><td>₩11,511,818</td><td>₩20,392,364</td></tr>
+        <tr><td>원부자재 (평균)</td><td>₩4,023,116</td><td>₩4,998,646</td><td>₩7,493,939</td></tr>
+        <tr><td>임대료 등 월 고정비</td><td>상이</td><td>상이</td><td>상이</td></tr>
+        <tr><td>i-MAD 이용료 (AI 매장운영 OS)</td><td>₩390,000</td><td>₩390,000</td><td>₩390,000</td></tr>
+        <tr><td>수익</td><td>₩4,927,903</td><td>₩6,123,172</td><td>₩12,508,425</td></tr>
+      </table>
+      </div>
+      <div class="cost-note">
+        <p>* 평균 판매가 2,500원 기준 월 평균 주문 잔 수 별 수익 예시</p>
+        <p class="gray">* 설치 매장별 월 유지비, 음료 판매가, 계약 방식에 따라 상이</p>
+      </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 13 Investment Types -->
+  <section class="investment-types" id="s13">
+    <div class="title"><p>투자 유형에 맞는 최적의 조건으로</p><p class="blue">선택 도입 가능</p></div>
+
+    <div class="invest-section">
+      <div class="invest-tt">
+        <h4><span class="blue">Buy Type.</span> 로봇 구매 유형</h4>
+        <p class="desc">투자자가 직업 운영을 목적으로 구매를 원하실 경우, 1명의 인건비로 3명의 퍼포먼스 가능</p>
+      </div>
+      <div class="invest-tables-row">
+        <table class="itable">
+          <colgroup><col style="width:282px"><col style="width:270px"><col style="width:232px"></colgroup>
+          <tr><th colspan="2">초기 투자 비용</th><th>비고</th></tr>
+          <tr><td class="label">로봇 선급 비용</td><td class="val">3,450만원</td><td class="note" rowspan="1"></td></tr>
+          <tr><td class="label blue">설치비</td><td class="val strike">290만원</td><td class="note blue" rowspan="4" style="font-weight:600">선착순 면제</td></tr>
+          <tr><td class="label blue">키오스크</td><td class="val strike">350만원</td></tr>
+          <tr><td class="label blue">교육비</td><td class="val strike">80만원</td></tr>
+          <tr><td class="label blue">초도 물품</td><td class="val strike">100만원</td></tr>
+          <tr><td class="label">설치 환경 조성</td><td class="val">선택 사항</td><td class="note">급배수 전기 설비</td></tr>
+          <tr class="sum"><td>합계</td><td>3,450만원</td><td></td></tr>
+        </table>
+        <div class="itable-col">
+          <table class="itable">
+            <colgroup><col style="width:282px"><col style="width:200px"><col style="width:302px"></colgroup>
+            <tr><th colspan="2">월 소요 비용</th><th>비고</th></tr>
+            <tr><td class="label">로봇 비용</td><td class="val">160만원</td><td class="note">60개월 예시 (신용별 차등)</td></tr>
+            <tr style="height:120px"><td class="label">i-MAD 비용<br>(AI 매장 운영)</td><td class="val">39만원</td><td class="note">관제 서비스,원격 관리,<br>AI 자동 물류, AI 마케팅, POS 등</td></tr>
+            <tr class="sum"><td>합계</td><td>199만원</td><td></td></tr>
+          </table>
+          <div class="invest-notes">
+            <p>* 선착순 혜택 : 초기투자 비용+정기 점검비 포함 약 1천만원 지원</p>
+            <p>* 혜택 제공 시점 : 매장 내 설치 완료 시</p>
+            <p>* 로봇 할부금은 이자 포함 예시이며, 개인 신용도에 따라 차이 발생</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="invest-section">
+      <div class="invest-tt">
+        <h4><span class="blue">Partnership Type.</span> 파트너십 유형</h4>
+        <p class="desc">기업, 관공서 등 파트너십 매장에 적합한 최적의 도입 조건</p>
+      </div>
+      <table class="itable" style="width:100%">
+        <colgroup><col style="width:440px"><col style="width:320px"><col style="width:320px"><col style="width:520px"></colgroup>
+        <tr style="height:98px"><th>내역</th><th>A타입 (복지형)<br><span style="font-weight:400;color:#454545">임직원 음료 무상 제공</span></th><th>A타입 (복지형)<br><span style="font-weight:400;color:#454545">임직원 음료 무상 제공</span></th><th>비고</th></tr>
+        <tr><td class="label">운영 계약 기간</td><td class="val">5년</td><td class="val">5년</td>
+          <td class="note" rowspan="6" style="text-align:left;color:#666;padding-left:32px;line-height:28px">
+            임직원 음료판매 (B타입)의 경우<br>→ Minimum Guarantee&nbsp; 월 600만원<br><br>
+            (예시)<br>
+            월 6,000잔 X 잔 당 판매가 1,000원 = 월 600만원
+            <ul style="list-style:disc;margin:0;padding:0"><li style="margin-left:30px">일 평균 300잔 (영업 일 수 20일 기준)</li><li style="margin-left:30px">아메리카노 판매가 1천원 기준으로 산정</li></ul>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(판매가 정책은 기업에서 결정)<br><br>
+            cf) 500만원 매출 발생 시, 100만원 차액 정산
+          </td></tr>
+        <tr style="height:155px"><td class="label" style="line-height:38px">b;eat 로봇 (장비)<br>키오스크<br>설치/시공</td><td class="val blue">무상 지원</td><td class="val blue">무상 지원</td></tr>
+        <tr><td class="label">물류 (원부자재 등)</td><td class="val blue">유상 공급 (원부자재 정산)</td><td class="val blue">무상 공급</td></tr>
+        <tr><td class="label">월 운영비 (① + ②)</td><td class="val blue">월 122만원</td><td class="val blue">무상 지원</td></tr>
+        <tr><td class="label">① 세정/세척 등 관리 업무 (주 5~7회 방문)</td><td class="val">월 110만원</td><td class="val">월 110만원</td></tr>
+        <tr><td class="label">② i-MAD 비용 (AI 매장 운영)</td><td class="val">월 39만원</td><td class="val">월 39만원</td></tr>
+      </table>
+      <p class="invest-note-single">* 도입 가능 대상 : 기업, 관공서 등 상주 인원 500명 이상 규모</p>
+    </div>
+  </section>
+
+  <!-- 14 Footer -->
+  <section class="footer">
+    <div class="footer-row">
+      <div class="footer-info">
+        <p class="company">주식회사 비트코퍼레이션</p>
+        <p>대표번호 : <span class="gray">1661-1167&nbsp;&nbsp;|&nbsp;&nbsp;</span>주소 : <span class="gray">경기도 성남시 분당구 황새울로311번길 36, 2층(서현동 261-1)</span></p>
+        <p>사업자등록번호 : <span class="gray">235-81-02321&nbsp;&nbsp;|&nbsp;&nbsp;</span>대표이사 : <span class="gray">채윤관</span></p>
+      </div>
+      <p class="copyright">ⓒ 2026 b;eat corp. All rights reserved.</p>
+    </div>
+  </section>
+
+</div>
+<script>
+  (function(){
+    var headerNav = document.querySelector('.header-nav');
+    function onScroll(){ headerNav.classList.toggle('scrolled', window.scrollY > 10); }
+    window.addEventListener('scroll', onScroll, { passive:true });
+    onScroll();
+  })();
+</script>
+<script>
+  // Word-by-word text reveal animation, triggered on scroll into view, for every section title.
+  (function(){
+    function wrapWords(el){
+      const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, null);
+      const textNodes = [];
+      let node;
+      while ((node = walker.nextNode())) {
+        if (node.nodeValue.trim().length) textNodes.push(node);
+      }
+      textNodes.forEach(textNode => {
+        const chunks = textNode.nodeValue.split(/(\s+)/);
+        const frag = document.createDocumentFragment();
+        chunks.forEach(chunk => {
+          if (chunk.trim() === '') {
+            frag.appendChild(document.createTextNode(chunk));
+          } else {
+            const span = document.createElement('span');
+            span.className = 'reveal-word';
+            span.textContent = chunk;
+            frag.appendChild(span);
+          }
+        });
+        textNode.parentNode.replaceChild(frag, textNode);
+      });
+    }
+
+    const titles = document.querySelectorAll('.title');
+    titles.forEach(el => {
+      el.classList.add('reveal-target');
+      wrapWords(el);
+      el.querySelectorAll('.reveal-word').forEach((w, i) => { w.style.transitionDelay = (i * 90) + 'ms'; });
+    });
+
+    // Standalone content images: reveal the whole image area (its wrapper box), not just the pixels inside it.
+    const imageGroups = [
+      document.querySelectorAll('.graph-wrap'),
+      document.querySelectorAll('.feature-card .img-wrap'),
+      document.querySelectorAll('.ai-panel .imgs'),
+      document.querySelectorAll('.hybrid-wrap .photo'),
+      document.querySelectorAll('.timeline-badge'),
+    ];
+    imageGroups.forEach(group => {
+      group.forEach((img, i) => {
+        img.classList.add('reveal-img');
+        img.style.transitionDelay = (i * 160) + 'ms';
+      });
+    });
+
+    // Auto-scrolling carousels reveal as a whole block (individual cards loop infinitely, so they aren't revealed one by one).
+    const carouselBlocks = document.querySelectorAll('.poster-row, .loc-carousel, .reviews-group');
+    carouselBlocks.forEach(el => el.classList.add('reveal-img'));
+
+    // Hero: title image 1 → title image 2 → sub-text, one after another on page load.
+    const heroSequence = [
+      ...document.querySelectorAll('.hero-title img'),
+      document.querySelector('.hero-tagline'),
+    ];
+    heroSequence.forEach((el, i) => {
+      el.classList.add('hero-reveal');
+      el.style.transitionDelay = (i * 550) + 'ms';
+    });
+
+    const images = document.querySelectorAll('.reveal-img');
+    const heroImages = heroSequence;
+
+    // Group every reveal target by its containing <section>, so the whole section's content
+    // reveals together as soon as the section's top edge is about a quarter into the viewport.
+    const sectionRevealMap = new Map();
+    function mapToSection(el){
+      const section = el.closest('section');
+      if (!section) return;
+      if (!sectionRevealMap.has(section)) sectionRevealMap.set(section, []);
+      sectionRevealMap.get(section).push(el);
+    }
+    titles.forEach(mapToSection);
+    images.forEach(mapToSection);
+
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const targets = sectionRevealMap.get(entry.target) || [];
+            targets.forEach(t => t.classList.add('revealed'));
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold:0, rootMargin:'0px 0px -25% 0px' });
+      sectionRevealMap.forEach((_, section) => observer.observe(section));
+      heroImages.forEach(el => el.classList.add('revealed'));
+    } else {
+      titles.forEach(el => el.classList.add('revealed'));
+      images.forEach(el => el.classList.add('revealed'));
+      heroImages.forEach(el => el.classList.add('revealed'));
+    }
+  })();
+</script>
+</body>
+</html>
