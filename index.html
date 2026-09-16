@@ -984,16 +984,22 @@
     images.forEach(mapToSection);
 
     if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            const targets = sectionRevealMap.get(entry.target) || [];
-            targets.forEach(t => t.classList.add('revealed'));
-            observer.unobserve(entry.target);
+      // Scroll-driven trigger (not IntersectionObserver) so it reliably fires as soon as a section's
+      // top edge reaches the lower quarter of the viewport, checked directly on scroll/resize/load.
+      const pendingSections = [...sectionRevealMap.keys()];
+      function checkSections(){
+        const triggerLine = window.innerHeight * 0.75;
+        for (let i = pendingSections.length - 1; i >= 0; i--) {
+          const section = pendingSections[i];
+          if (section.getBoundingClientRect().top <= triggerLine) {
+            (sectionRevealMap.get(section) || []).forEach(t => t.classList.add('revealed'));
+            pendingSections.splice(i, 1);
           }
-        });
-      }, { threshold:0, rootMargin:'0px 0px -25% 0px' });
-      sectionRevealMap.forEach((_, section) => observer.observe(section));
+        }
+      }
+      checkSections();
+      window.addEventListener('scroll', checkSections, { passive:true });
+      window.addEventListener('resize', checkSections);
       heroImages.forEach(el => el.classList.add('revealed'));
     } else {
       titles.forEach(el => el.classList.add('revealed'));
