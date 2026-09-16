@@ -25,14 +25,14 @@
   }
   .title .blue { color:#559ce3; }
 
-  /* Text reveal-on-scroll (word-by-word slide-up animation for section titles, with a light fade) */
-  .reveal-word { display:inline-block; opacity:.4; transform:translateY(18px);
+  /* Fade-in-up reveal-on-scroll (opacity 0 -> 1 plus slide-up) for every section's text and image areas */
+  .reveal-word { display:inline-block; opacity:0; transform:translateY(18px);
     transition:opacity .5s ease, transform .8s cubic-bezier(0.22,1,0.36,1); }
   .reveal-target.revealed .reveal-word { opacity:1; transform:translateY(0); }
-  .reveal-img { opacity:.4; transform:translateY(24px);
+  .reveal-img { opacity:0; transform:translateY(24px);
     transition:opacity .5s ease, transform .9s cubic-bezier(0.22,1,0.36,1); }
   .reveal-img.revealed { opacity:1; transform:translateY(0); }
-  .hero-reveal { opacity:.4; transform:translateY(120px);
+  .hero-reveal { opacity:0; transform:translateY(120px);
     transition:opacity .6s ease, transform 1s cubic-bezier(0.22,1,0.36,1); }
   .hero-reveal.revealed { opacity:1; transform:translateY(0); }
   @media (prefers-reduced-motion: reduce) {
@@ -922,6 +922,41 @@
     // Auto-scrolling carousels reveal as a whole block (individual cards loop infinitely, so they aren't revealed one by one).
     const carouselBlocks = document.querySelectorAll('.poster-row, .loc-carousel, .reviews-group');
     carouselBlocks.forEach(el => el.classList.add('reveal-img'));
+
+    // Every other content block across every section: same fade+slide-up, staggered within its own section.
+    const contentGroups = [
+      document.querySelectorAll('.promo-badge'),
+      document.querySelectorAll('.promo-title'),
+      document.querySelectorAll('.promo-card'),
+      document.querySelectorAll('.stats .sub-text'),
+      document.querySelectorAll('.feature-grid .sub-text'),
+      document.querySelectorAll('.feature-card .f-title, .feature-card .f-desc'),
+      document.querySelectorAll('.ai-tabs'),
+      document.querySelectorAll('.ai-panel .text'),
+      document.querySelectorAll('.seasonal .sub-text'),
+      document.querySelectorAll('.review-video .stars'),
+      document.querySelectorAll('.review-video .video-wrap'),
+      document.querySelectorAll('.premium-locations .sub-text'),
+      document.querySelectorAll('.loc-scrollbar'),
+      document.querySelectorAll('.hybrid-wrap .panel'),
+      document.querySelectorAll('.hybrid-wrap .dots'),
+      document.querySelectorAll('.customer-reviews .sub-text'),
+      document.querySelectorAll('.tech-timeline .sub-text'),
+      document.querySelectorAll('.timeline-col'),
+      document.querySelectorAll('.labor-cost .sub-text'),
+      document.querySelectorAll('.donut-wrap'),
+      document.querySelectorAll('.cost-table-wrap'),
+      document.querySelectorAll('.cost-note'),
+      document.querySelectorAll('.invest-section'),
+      document.querySelectorAll('.footer-info'),
+      document.querySelectorAll('.footer .copyright'),
+    ];
+    contentGroups.forEach(group => {
+      group.forEach((el, i) => {
+        el.classList.add('reveal-img');
+        el.style.transitionDelay = (i * 150) + 'ms';
+      });
+    });
 
     // Hero: title image 1 → title image 2 → sub-text, one after another on page load.
     const heroSequence = [
