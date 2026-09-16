@@ -56,6 +56,11 @@
   .nav-items a { text-decoration:none; display:inline-flex; align-items:center; }
   .cta-btn { background:#559ce3; padding:8px 20px; border-radius:33px; }
   .cta-btn p { color:#fff; }
+  .nav-toggle { display:none; flex-direction:column; justify-content:center; gap:5px; width:32px; height:32px; background:none; border:none; padding:0; cursor:pointer; z-index:60; }
+  .nav-toggle span { display:block; width:100%; height:2px; background:#fff; border-radius:2px; transition:transform .3s ease, opacity .3s ease; }
+  .nav-toggle.active span:nth-child(1) { transform:translateY(7px) rotate(45deg); }
+  .nav-toggle.active span:nth-child(2) { opacity:0; }
+  .nav-toggle.active span:nth-child(3) { transform:translateY(-7px) rotate(-45deg); }
   .hero-content { position:relative; z-index:2; flex:1; width:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:18px; margin-top:-120px; }
   .hero-title { width:100%; display:flex; flex-direction:column; align-items:center; text-align:center; line-height:1.12; }
   .hero-tagline { margin-top:24px; color:#999; font-weight:500; font-size:24px; letter-spacing:12px; text-align:center; }
@@ -107,6 +112,7 @@
   .ai-tab { padding:10px 24px; border-radius:20px; font-weight:600; font-size:20px; color:#737882; cursor:pointer; transition:background-color .2s ease, color .2s ease; }
   .ai-tab:hover:not(.active) { background:rgba(85,156,227,0.12); color:#559ce3; }
   .ai-tab.active { background:#559ce3; color:#fff; padding:10px 24px; border-radius:30px; }
+  .ai-tabs-select { display:none; }
   .ai-panel { position:relative; background:#fff; border:1px solid #e5e5eb; width:100%; max-width:1600px; display:flex; justify-content:flex-end; padding:50px 100px 50px 0; overflow:hidden; }
   .ai-panel .imgs { display:flex; align-items:center; justify-content:flex-end; }
   .ai-panel .imgs img { max-width:100%; width:917px; }
@@ -247,7 +253,8 @@
   .invest-tt .desc { font-size:20px; font-weight:400; color:#666; }
   .invest-tables-row { display:flex; gap:32px; align-items:flex-start; flex-wrap:nowrap; }
   .itable-col { display:flex; flex-direction:column; }
-  .itable { border-collapse:collapse; font-size:20px; }
+  .itable-scroll { width:100%; overflow-x:auto; }
+  .itable { border-collapse:collapse; font-size:20px; min-width:784px; }
   .itable th { background:#edf6ff; color:#559ce3; font-weight:700; border:1px solid #d9d9d9; padding:20px 16px; }
   .itable td { border:1px solid #d9d9d9; padding:20px 16px; text-align:center; }
   .itable td.label { background:#f5f5f5; color:#151515; }
@@ -271,22 +278,69 @@
   .footer p .gray { color:#999; }
   .footer .copyright { font-size:16px; line-height:16px; color:#999; white-space:nowrap; }
 
+  /* Tablet / small-laptop tier: fixes real overflow that base (PC) rules never needed to handle
+     at their intended wide-desktop width, without altering any base rule used above this range. */
+  @media (max-width:1300px) and (min-width:901px) {
+    .labor-wrap { flex-wrap:wrap; gap:40px; justify-content:center; }
+  }
+
   @media (max-width:900px) {
-    .header-nav { padding:16px 20px; } .nav-items { display:none; }
-    .hero-tagline { font-size:14px; letter-spacing:4px; }
+    .header-nav { padding:16px 20px; height:64px; }
+    .logo-mark { height:24px !important; }
+    .nav-toggle { display:flex; }
+    .nav-items { display:none; position:fixed; top:64px; left:0; right:0; flex-direction:column; align-items:stretch; gap:0; background:#151515; padding:20px 0; max-height:calc(100vh - 64px); overflow-y:auto; box-shadow:0 8px 20px rgba(0,0,0,.3); }
+    .nav-items.open { display:flex; }
+    .nav-items a { width:100%; padding:24px 20px; }
+    .nav-items p { font-size:20px; }
+    .nav-items .cta-btn { width:auto; margin:12px 20px 50px; padding:12px 20px; justify-content:center; }
+    .hero { height:1000px; aspect-ratio:auto; justify-content:center; gap:24px; }
+    .hero-bg { position:static; width:calc(100% + 40px); margin-left:-20px; height:auto; aspect-ratio:1920/1080; }
+    .hero-content { flex:none; margin-top:0; padding-top:0; gap:12px; }
+    .hero-title img { min-width:320px !important; }
+    .hero-tagline { font-size:20px; letter-spacing:4px; }
     .promo-title, .stats .title, .feature-grid .title, .ai-solution .title,
     .seasonal .title, .review-video .title, .premium-locations .title, .hybrid-store .title,
-    .customer-reviews .title, .tech-timeline .title, .labor-cost .title, .investment-types .title { font-size:30px; }
+    .customer-reviews .title, .tech-timeline .title, .labor-cost .title, .investment-types .title { font-size:38px; line-height:1.3; gap:0; }
+    .promo-title p { margin-bottom:0; }
+    .stats .graph-area { display:flex; flex-direction:column; align-items:center; gap:16px; }
+    .stats .sub-text { position:static; left:auto; top:auto; transform:none; white-space:normal; order:-1; }
+    .stats .sub-text .l1, .stats .sub-text .l3, .feature-grid .sub-text, .seasonal .sub-text,
+    .customer-reviews .sub-text, .premium-locations .sub-text, .tech-timeline .sub-text, .labor-cost .sub-text { font-size:1.3em; }
+    /* Sub-title / content-tier text that inherited its desktop size was as large as (or larger
+       than) the 30px mobile section title above — rescaled down so title > sub-title > content
+       stays a real hierarchy on mobile too. */
+    .promo-card .card-price { gap:8px; }
+    .promo-card .price-new { font-size:52px; }
+    .promo-card .price-new .unit { font-size:36px; }
+    .feature-card .f-title { font-size:1.6em; }
+    .feature-card .f-desc { font-size:1.15em; }
+    .feature-row { gap:50px; }
+    .feature-card { gap:20px; }
+    .ai-tabs { display:none; }
+    .ai-tabs-select { display:block; width:100%; margin-top:16px; padding:14px 40px 14px 16px; border:1px solid #d9d9d9; border-radius:0; background:#fff; color:#151515; font-family:'Pretendard', sans-serif; font-weight:600; font-size:1.15em;
+      appearance:none; -webkit-appearance:none; -moz-appearance:none;
+      background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23151515' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
+      background-repeat:no-repeat; background-position:right 16px center; background-size:14px; }
+    .ai-panel .text { text-align:center; align-items:center; }
+    .ai-panel .eyebrow { font-size:1.2em; }
+    .ai-panel .headline { font-size:1.6em; }
+    .ai-panel .desc { font-size:1.15em; }
+    .review-video .stars { font-size:20px; letter-spacing:4px; }
+    .location-card .cat { font-size:20px; }
+    .hybrid-wrap .main-text { font-size:20px; }
+    .timeline-item .year { font-size:20px; }
+    .invest-tt h4 { font-size:20px; }
     section { padding-left:20px !important; padding-right:20px !important; }
     .labor-wrap, .timeline-wrap { flex-direction:column; }
     .ai-panel { flex-direction:column-reverse; padding:24px !important; }
-    .ai-panel .text { position:static; max-width:100%; margin-bottom:16px; }
+    .ai-panel .text { position:static; max-width:100%; margin-bottom:24px; }
     .ai-panel .imgs img { width:100%; }
     .hybrid-wrap { position:static; padding-top:0; display:flex; flex-direction:column; gap:16px; }
     .hybrid-wrap .photo { position:static; width:100%; height:auto; aspect-ratio:1060/600; }
     .hybrid-wrap .panel { position:static; width:100%; height:auto; padding:32px 24px; }
     .hybrid-wrap .dots { position:static; justify-content:center; }
-    .invest-tables-row { flex-direction:column; }
+    .invest-tables-row { flex-direction:column; align-items:stretch; }
+    .itable-col { width:100%; }
     .footer-row { flex-direction:column; align-items:flex-start; }
     .timeline-cols { min-width:0; flex-direction:column; gap:28px; }
     .donut-outer { display:block; width:260px; height:287px; margin:0 auto; overflow:hidden; }
@@ -302,6 +356,9 @@
     <video class="hero-bg" src="./assets/top_bg.mp4" poster="./assets/top_bg.jpg" autoplay muted loop playsinline></video>
     <div class="header-nav">
       <a href="#top"><img class="logo-mark" src="./assets/logo.png" alt="b;eat" style="height:30px;width:auto" /></a>
+      <button class="nav-toggle" type="button" aria-label="메뉴 열기" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
       <div class="nav-items">
         <a href="#s3"><p>브랜드소개</p></a>
         <a href="#s4"><p>b;eat 경쟁력</p></a>
@@ -402,6 +459,11 @@
       <div class="ai-tab" onclick="showAiTab(1,this)">AI 자동발주</div>
       <div class="ai-tab" onclick="showAiTab(2,this)">AI 마케팅기능</div>
     </div>
+    <select class="ai-tabs-select" onchange="showAiTabFromSelect(this)">
+      <option value="0">AI 대시보드</option>
+      <option value="1">AI 자동발주</option>
+      <option value="2">AI 마케팅기능</option>
+    </select>
     <div class="ai-panel">
       <div class="imgs"><img id="ai-tab-img" src="./assets/tab_img1.jpg" /></div>
       <div class="text">
@@ -423,14 +485,24 @@
         { img:'./assets/tab_img3.jpg', eyebrow:'자동으로 단골 만들기!', headline:'마케팅 자동화 지원',
           desc:['매장과 고객의 성향을 분석하여 재방문 활성, 매출 활성,','특정 메뉴의 판매 활성 등의 쿠폰 성향에 따라','정밀 대상 마케팅 자동화 기능 제공'] },
       ];
-      function showAiTab(idx, el){
-        document.querySelectorAll('.ai-tab').forEach(t=>t.classList.remove('active'));
-        el.classList.add('active');
+      function updateAiPanel(idx){
         const d = aiTabData[idx];
         document.getElementById('ai-tab-img').src = d.img;
         document.getElementById('ai-eyebrow').textContent = d.eyebrow;
         document.getElementById('ai-headline').innerHTML = d.headline;
         document.getElementById('ai-desc').innerHTML = d.desc.map(p=>`<p>${p}</p>`).join('');
+      }
+      function showAiTab(idx, el){
+        document.querySelectorAll('.ai-tab').forEach(t=>t.classList.remove('active'));
+        el.classList.add('active');
+        updateAiPanel(idx);
+        const select = document.querySelector('.ai-tabs-select');
+        if (select) select.selectedIndex = idx;
+      }
+      function showAiTabFromSelect(select){
+        const idx = select.selectedIndex;
+        document.querySelectorAll('.ai-tab').forEach((t,i)=>t.classList.toggle('active', i===idx));
+        updateAiPanel(idx);
       }
     </script>
   </section>
@@ -796,6 +868,7 @@
         <p class="desc">투자자가 직업 운영을 목적으로 구매를 원하실 경우, 1명의 인건비로 3명의 퍼포먼스 가능</p>
       </div>
       <div class="invest-tables-row">
+        <div class="itable-scroll">
         <table class="itable">
           <colgroup><col style="width:282px"><col style="width:270px"><col style="width:232px"></colgroup>
           <tr><th colspan="2">초기 투자 비용</th><th>비고</th></tr>
@@ -807,7 +880,9 @@
           <tr><td class="label">설치 환경 조성</td><td class="val">선택 사항</td><td class="note">급배수 전기 설비</td></tr>
           <tr class="sum"><td>합계</td><td>3,450만원</td><td></td></tr>
         </table>
+        </div>
         <div class="itable-col">
+          <div class="itable-scroll">
           <table class="itable">
             <colgroup><col style="width:282px"><col style="width:200px"><col style="width:302px"></colgroup>
             <tr><th colspan="2">월 소요 비용</th><th>비고</th></tr>
@@ -815,6 +890,7 @@
             <tr style="height:120px"><td class="label">i-MAD 비용<br>(AI 매장 운영)</td><td class="val">39만원</td><td class="note">관제 서비스,원격 관리,<br>AI 자동 물류, AI 마케팅, POS 등</td></tr>
             <tr class="sum"><td>합계</td><td>199만원</td><td></td></tr>
           </table>
+          </div>
           <div class="invest-notes">
             <p>* 선착순 혜택 : 초기투자 비용+정기 점검비 포함 약 1천만원 지원</p>
             <p>* 혜택 제공 시점 : 매장 내 설치 완료 시</p>
@@ -829,7 +905,8 @@
         <h4><span class="blue">Partnership Type.</span> 파트너십 유형</h4>
         <p class="desc">기업, 관공서 등 파트너십 매장에 적합한 최적의 도입 조건</p>
       </div>
-      <table class="itable" style="width:100%">
+      <div class="itable-scroll">
+      <table class="itable" style="width:100%;min-width:1600px">
         <colgroup><col style="width:440px"><col style="width:320px"><col style="width:320px"><col style="width:520px"></colgroup>
         <tr style="height:98px"><th>내역</th><th>A타입 (복지형)<br><span style="font-weight:400;color:#454545">임직원 음료 무상 제공</span></th><th>A타입 (복지형)<br><span style="font-weight:400;color:#454545">임직원 음료 무상 제공</span></th><th>비고</th></tr>
         <tr><td class="label">운영 계약 기간</td><td class="val">5년</td><td class="val">5년</td>
@@ -847,6 +924,7 @@
         <tr><td class="label">① 세정/세척 등 관리 업무 (주 5~7회 방문)</td><td class="val">월 110만원</td><td class="val">월 110만원</td></tr>
         <tr><td class="label">② i-MAD 비용 (AI 매장 운영)</td><td class="val">월 39만원</td><td class="val">월 39만원</td></tr>
       </table>
+      </div>
       <p class="invest-note-single">* 도입 가능 대상 : 기업, 관공서 등 상주 인원 500명 이상 규모</p>
     </div>
   </section>
@@ -870,6 +948,26 @@
     function onScroll(){ headerNav.classList.toggle('scrolled', window.scrollY > 10); }
     window.addEventListener('scroll', onScroll, { passive:true });
     onScroll();
+  })();
+</script>
+<script>
+  (function(){
+    var navToggle = document.querySelector('.nav-toggle');
+    var navItems = document.querySelector('.nav-items');
+    if (!navToggle || !navItems) return;
+    function closeMenu(){
+      navToggle.classList.remove('active');
+      navItems.classList.remove('open');
+      navToggle.setAttribute('aria-expanded', 'false');
+    }
+    navToggle.addEventListener('click', function(){
+      var isOpen = navItems.classList.toggle('open');
+      navToggle.classList.toggle('active', isOpen);
+      navToggle.setAttribute('aria-expanded', String(isOpen));
+    });
+    navItems.querySelectorAll('a').forEach(function(a){
+      a.addEventListener('click', closeMenu);
+    });
   })();
 </script>
 <script>
@@ -1012,9 +1110,13 @@
     const pendingSections = [...sectionRevealMap.keys()];
     function checkSections(){
       const triggerLine = window.innerHeight * 0.75;
+      // On a tall viewport, a short trailing section (e.g. the footer) can sit lower than 75%
+      // of the viewport even at maximum scroll, so its top never crosses triggerLine. Treat
+      // "scrolled to the bottom of the page" as an additional trigger so it still reveals.
+      const atBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2;
       for (let i = pendingSections.length - 1; i >= 0; i--) {
         const section = pendingSections[i];
-        if (section.getBoundingClientRect().top <= triggerLine) {
+        if (atBottom || section.getBoundingClientRect().top <= triggerLine) {
           (sectionRevealMap.get(section) || []).forEach(t => t.classList.add('revealed'));
           pendingSections.splice(i, 1);
         }
@@ -1025,7 +1127,7 @@
     window.addEventListener('resize', checkSections);
     // Force the browser to paint the hero's initial (offset/transparent) state at least once
     // before adding 'revealed', otherwise the two class changes can collapse into one frame
-    // and the transition never plays. The 0/550/1100ms stagger is driven here in JS (setTimeout)
+    // and the transition never plays. The staggered reveal is driven here in JS (setTimeout)
     // rather than via CSS transition-delay, since a delay that long can be disrupted by page-load
     // jank (video/image/font loading) and silently fail to ever start.
     requestAnimationFrame(() => {
