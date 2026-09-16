@@ -1025,7 +1025,7 @@
     window.addEventListener('resize', checkSections);
     // Force the browser to paint the hero's initial (offset/transparent) state at least once
     // before adding 'revealed', otherwise the two class changes can collapse into one frame
-    // and the transition never plays. The 0/550/1100ms stagger is driven here in JS (setTimeout)
+    // and the transition never plays. The staggered reveal is driven here in JS (setTimeout)
     // rather than via CSS transition-delay, since a delay that long can be disrupted by page-load
     // jank (video/image/font loading) and silently fail to ever start.
     requestAnimationFrame(() => {
