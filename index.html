@@ -904,6 +904,23 @@
       el.querySelectorAll('.reveal-word').forEach((w, i) => { w.style.transitionDelay = (i * 90) + 'ms'; });
     });
 
+    // Section heading tier (sections that don't use .title, e.g. the promo banner's own heading):
+    // reveals at the same time as everywhere else's .title, i.e. first.
+    const headingGroups = [
+      document.querySelectorAll('.promo-badge'),
+      document.querySelectorAll('.promo-title'),
+    ];
+    headingGroups.forEach(group => {
+      group.forEach((el, i) => {
+        el.classList.add('reveal-img');
+        el.style.transitionDelay = (i * 150) + 'ms';
+      });
+    });
+
+    // Content tier: everything below the title/sub-text (images, cards, tables, panels, footer, ...).
+    // Given its own later base delay so the sequence always reads title -> sub-text -> content.
+    const CONTENT_BASE_DELAY = 600;
+
     // Standalone content images: reveal the whole image area (its wrapper box), not just the pixels inside it.
     const imageGroups = [
       document.querySelectorAll('.graph-wrap'),
@@ -915,35 +932,26 @@
     imageGroups.forEach(group => {
       group.forEach((img, i) => {
         img.classList.add('reveal-img');
-        img.style.transitionDelay = (i * 160) + 'ms';
+        img.style.transitionDelay = (CONTENT_BASE_DELAY + i * 160) + 'ms';
       });
     });
 
     // Auto-scrolling carousels reveal as a whole block (individual cards loop infinitely, so they aren't revealed one by one).
     const carouselBlocks = document.querySelectorAll('.poster-row, .loc-carousel, .reviews-group');
-    carouselBlocks.forEach(el => el.classList.add('reveal-img'));
+    carouselBlocks.forEach(el => { el.classList.add('reveal-img'); el.style.transitionDelay = CONTENT_BASE_DELAY + 'ms'; });
 
     // Every other content block across every section: same fade+slide-up, staggered within its own section.
     const contentGroups = [
-      document.querySelectorAll('.promo-badge'),
-      document.querySelectorAll('.promo-title'),
       document.querySelectorAll('.promo-card'),
-      document.querySelectorAll('.stats .sub-text'),
-      document.querySelectorAll('.feature-grid .sub-text'),
       document.querySelectorAll('.feature-card .f-title, .feature-card .f-desc'),
       document.querySelectorAll('.ai-tabs'),
       document.querySelectorAll('.ai-panel .text'),
-      document.querySelectorAll('.seasonal .sub-text'),
       document.querySelectorAll('.review-video .stars'),
       document.querySelectorAll('.review-video .video-wrap'),
-      document.querySelectorAll('.premium-locations .sub-text'),
       document.querySelectorAll('.loc-scrollbar'),
       document.querySelectorAll('.hybrid-wrap .panel'),
       document.querySelectorAll('.hybrid-wrap .dots'),
-      document.querySelectorAll('.customer-reviews .sub-text'),
-      document.querySelectorAll('.tech-timeline .sub-text'),
       document.querySelectorAll('.timeline-col'),
-      document.querySelectorAll('.labor-cost .sub-text'),
       document.querySelectorAll('.donut-wrap'),
       document.querySelectorAll('.cost-table-wrap'),
       document.querySelectorAll('.cost-note'),
@@ -954,8 +962,15 @@
     contentGroups.forEach(group => {
       group.forEach((el, i) => {
         el.classList.add('reveal-img');
-        el.style.transitionDelay = (i * 150) + 'ms';
+        el.style.transitionDelay = (CONTENT_BASE_DELAY + i * 150) + 'ms';
       });
+    });
+
+    // Sub-text reveals a beat after its section's title word-cascade starts, so the sequence
+    // (title words, then sub-text, then content) is clearly visible instead of all at once.
+    document.querySelectorAll('.stats .sub-text, .feature-grid .sub-text, .seasonal .sub-text, .premium-locations .sub-text, .customer-reviews .sub-text, .tech-timeline .sub-text, .labor-cost .sub-text').forEach(el => {
+      el.classList.add('reveal-img');
+      el.style.transitionDelay = '350ms';
     });
 
     // Hero: title image 1 → title image 2 → sub-text, one after another on page load.
