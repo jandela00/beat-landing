@@ -125,11 +125,10 @@
   .seasonal { padding:120px 0; gap:32px; }
   .seasonal .title { padding:0 8.3%; font-weight:800; font-size:60px; color:#151515; text-align:center; }
   .seasonal .sub-text, .customer-reviews .sub-text { padding:0 8.3% 28px; color:#454545; font-size:24px; text-align:center; }
-  .poster-row { width:100%; overflow:hidden; }
-  .poster-track { display:flex; gap:24px; width:max-content; animation:posterScroll 32s linear infinite; }
-  .poster-row:hover .poster-track { animation-play-state:paused; }
+  .poster-row { width:100%; overflow-x:auto; overflow-y:hidden; overscroll-behavior-x:contain; scrollbar-width:none; -ms-overflow-style:none; }
+  .poster-row::-webkit-scrollbar { display:none; }
+  .poster-track { display:flex; gap:24px; width:max-content; }
   .poster-track img { flex:0 0 282px; width:282px; aspect-ratio:282/500; object-fit:cover; }
-  @keyframes posterScroll { from{ transform:translateX(0); } to{ transform:translateX(-2448px); } }
 
   /* ---------- 07 Operator Review Video ---------- */
   .review-video { background:#21222e; padding:120px 8.3%; }
@@ -177,13 +176,12 @@
   .customer-reviews { background:#e4eef8; padding:120px 0; gap:32px; }
   .customer-reviews .title { padding:0 8.3%; font-weight:800; font-size:60px; text-align:center; }
   .reviews-group { width:100%; display:flex; flex-direction:column; gap:16px; }
-  .clip-carousel { width:100%; overflow:hidden; }
-  .clip-track { display:flex; gap:16px; width:max-content; padding:0 8.3%; animation:clipScroll 40s linear infinite; will-change:transform; }
-  .clip-carousel:hover .clip-track { animation-play-state:paused; }
+  .clip-carousel { width:100%; overflow-x:auto; overflow-y:hidden; overscroll-behavior-x:contain; scrollbar-width:none; -ms-overflow-style:none; }
+  .clip-carousel::-webkit-scrollbar { display:none; }
+  .clip-track { display:flex; gap:16px; width:max-content; padding:0 8.3%; }
   .clip-card { flex:0 0 348px; width:348px; height:602px; }
   .clip-card a { display:block; width:100%; height:100%; }
   .clip-card img { width:100%; height:100%; object-fit:cover; display:block; }
-  @keyframes clipScroll { from{ transform:translateX(0); } to{ transform:translateX(-2184px); } }
   .reviews-row { width:100%; overflow-x:auto; overflow-y:hidden; overscroll-behavior-x:contain; scrollbar-width:none; -ms-overflow-style:none; }
   .reviews-row::-webkit-scrollbar { display:none; }
   .reviews-track { display:flex; gap:16px; width:max-content; padding:0 8.3%; box-sizing:border-box; }
@@ -306,6 +304,7 @@
     .stats .sub-text { position:static; left:auto; top:auto; transform:none; white-space:normal; order:-1; }
     .stats .sub-text .l1, .stats .sub-text .l3, .feature-grid .sub-text, .seasonal .sub-text,
     .customer-reviews .sub-text, .premium-locations .sub-text, .tech-timeline .sub-text, .labor-cost .sub-text { font-size:1.3em; }
+    .premium-locations .sub-text p:first-child { display:flex; flex-direction:column; gap:8px; }
     /* Sub-title / content-tier text that inherited its desktop size was as large as (or larger
        than) the 30px mobile section title above — rescaled down so title > sub-title > content
        stays a real hierarchy on mobile too. */
@@ -313,7 +312,7 @@
     .promo-card .price-new { font-size:52px; }
     .promo-card .price-new .unit { font-size:36px; }
     .feature-card .f-title { font-size:1.6em; }
-    .feature-card .f-desc { font-size:1.15em; }
+    .feature-card .f-desc { font-size:1.15em; gap:0; }
     .feature-row { gap:50px; }
     .feature-card { gap:20px; }
     .ai-tabs { display:none; }
@@ -326,25 +325,43 @@
     .ai-panel .headline { font-size:1.6em; }
     .ai-panel .desc { font-size:1.15em; }
     .review-video .stars { font-size:20px; letter-spacing:4px; }
-    .location-card .cat { font-size:20px; }
-    .hybrid-wrap .main-text { font-size:20px; }
-    .timeline-item .year { font-size:20px; }
-    .invest-tt h4 { font-size:20px; }
+    .loc-track { padding:0; gap:16px; }
+    .location-card { flex:0 0 calc(100vw - 88px); width:calc(100vw - 88px); gap:16px; }
+    .location-card .cat { font-size:1.6em; }
+    /* rem (not em) so it stays 1.0em of the base rather than compounding on .cat's 1.6em */
+    .location-card .cat .en { font-size:1rem; }
+    .location-card .desc { font-size:1.0em; }
+    .hybrid-wrap .main-text { font-size:1.6em; }
+    .hybrid-wrap .sub-text-block { font-size:1.0em; gap:0; line-height:1.6em; }
+    .timeline-item .year { font-size:1.8em; }
+    .timeline-item li { font-size:1.15em; }
+    .invest-tt h4 { font-size:1.6em; }
     section { padding-left:20px !important; padding-right:20px !important; }
     .labor-wrap, .timeline-wrap { flex-direction:column; }
-    .ai-panel { flex-direction:column-reverse; padding:24px !important; }
+    .labor-wrap { gap:50px; }
+    .timeline-wrap { gap:40px; }
+    .ai-panel { flex-direction:column-reverse; padding:40px 24px !important; }
     .ai-panel .text { position:static; max-width:100%; margin-bottom:24px; }
     .ai-panel .imgs img { width:100%; }
     .hybrid-wrap { position:static; padding-top:0; display:flex; flex-direction:column; gap:16px; }
     .hybrid-wrap .photo { position:static; width:100%; height:auto; aspect-ratio:1060/600; }
     .hybrid-wrap .panel { position:static; width:100%; height:auto; padding:32px 24px; }
+    .hybrid-wrap .panel-inner { align-items:center; text-align:center; }
     .hybrid-wrap .dots { position:static; justify-content:center; }
     .invest-tables-row { flex-direction:column; align-items:stretch; }
     .itable-col { width:100%; }
+    .invest-tt .desc { font-size:1.15em; }
+    .invest-note-single { font-size:16px; }
+    .itable-scroll { zoom:0.7; }
     .footer-row { flex-direction:column; align-items:flex-start; }
+    .footer .company { font-size:16px; }
+    .footer p { font-size:12.8px; }
+    .footer .copyright { font-size:12.8px; }
     .timeline-cols { min-width:0; flex-direction:column; gap:28px; }
-    .donut-outer { display:block; width:260px; height:287px; margin:0 auto; overflow:hidden; }
-    .donut-outer .donut-wrap { transform:scale(0.4333); transform-origin:top left; }
+    .donut-outer { display:block; width:330px; height:364px; margin:0 auto; overflow:hidden; }
+    .donut-outer .donut-wrap { transform:scale(0.55); transform-origin:top left; }
+    .cost-table-scroll { zoom:0.7; }
+    .cost-table-scroll .cost-table { width:max-content; margin:0 auto; }
   }
 </style>
 </head>
@@ -515,7 +532,7 @@
       <div class="poster-track">
         <img src="./assets/s6_01.jpg" /><img src="./assets/s6_02.jpg" /><img src="./assets/s6_03.jpg" />
         <img src="./assets/s6_04.jpg" /><img src="./assets/s6_05.jpg" /><img src="./assets/s6_06.jpg" /><img src="./assets/s6_07.jpg" /><img src="./assets/s6_08.jpg" />
-        <img src="./assets/s6_01.jpg" aria-hidden="true" /><img src="./assets/s6_02.jpg" aria-hidden="true" /><img src="./assets/s6_03.jpg" aria-hidden="true" />
+        <img src="./assets/s6_01.jpg" aria-hidden="true" id="poster-dup-start" /><img src="./assets/s6_02.jpg" aria-hidden="true" /><img src="./assets/s6_03.jpg" aria-hidden="true" />
         <img src="./assets/s6_04.jpg" aria-hidden="true" /><img src="./assets/s6_05.jpg" aria-hidden="true" /><img src="./assets/s6_06.jpg" aria-hidden="true" /><img src="./assets/s6_07.jpg" aria-hidden="true" /><img src="./assets/s6_08.jpg" aria-hidden="true" />
       </div>
     </div>
@@ -526,6 +543,20 @@
     function initInfiniteCarousel({ carousel, track, dupStart, direction, speed = 36, thumb, trackBg, pauseOnHover = false, initOffset = false }){
       const firstCard = track.children[0];
       let shiftAmount = 0, startPoint = 0, resetPoint = 0, autoScroll = true, resumeTimer = null, lastTime = null, positioned = false;
+      let pos = 0, interacting = false;
+
+      function wrap(v){
+        if (shiftAmount > 0) {
+          if (direction > 0) {
+            while (v >= resetPoint) v -= shiftAmount;
+            while (v < startPoint) v += shiftAmount;
+          } else {
+            while (v <= startPoint) v += shiftAmount;
+            while (v > resetPoint) v -= shiftAmount;
+          }
+        }
+        return v;
+      }
 
       function measure(){
         startPoint = firstCard.offsetLeft;
@@ -535,6 +566,7 @@
           carousel.scrollLeft = startPoint + shiftAmount;
           positioned = true;
         }
+        pos = carousel.scrollLeft;
       }
       measure();
       window.addEventListener('resize', measure);
@@ -543,15 +575,16 @@
         if (lastTime === null) lastTime = ts;
         const dt = Math.min(0.1, (ts - lastTime) / 1000);
         lastTime = ts;
-        if (autoScroll) carousel.scrollLeft += direction * speed * dt;
-        if (shiftAmount > 0) {
-          if (direction > 0) {
-            while (carousel.scrollLeft >= resetPoint) carousel.scrollLeft -= shiftAmount;
-            while (carousel.scrollLeft < startPoint) carousel.scrollLeft += shiftAmount;
-          } else {
-            while (carousel.scrollLeft <= startPoint) carousel.scrollLeft += shiftAmount;
-            while (carousel.scrollLeft > resetPoint) carousel.scrollLeft -= shiftAmount;
-          }
+        if (autoScroll && !interacting) {
+          // Advance a float accumulator: sub-pixel per-frame steps would otherwise be lost to
+          // integer scrollLeft rounding on mobile, stalling the auto-scroll entirely.
+          pos = wrap(pos + direction * speed * dt);
+          carousel.scrollLeft = pos;
+        } else {
+          // User is swiping (or auto-scroll is paused): follow the real scrollLeft and keep the
+          // infinite loop seamless while they drag.
+          pos = wrap(carousel.scrollLeft);
+          if (pos !== carousel.scrollLeft) carousel.scrollLeft = pos;
         }
         if (shiftAmount > 0 && thumb && trackBg) {
           const progress = ((carousel.scrollLeft % shiftAmount) + shiftAmount) % shiftAmount / shiftAmount;
@@ -567,8 +600,19 @@
 
       if (pauseOnHover) {
         carousel.addEventListener('mouseenter', () => { autoScroll = false; });
-        carousel.addEventListener('mouseleave', () => { clearTimeout(resumeTimer); autoScroll = true; });
+        carousel.addEventListener('mouseleave', () => { if (!interacting) { clearTimeout(resumeTimer); autoScroll = true; } });
       }
+
+      // Pause auto-scroll while the user actively swipes/drags, then resume shortly after release.
+      carousel.addEventListener('pointerdown', () => { interacting = true; autoScroll = false; clearTimeout(resumeTimer); });
+      const endInteract = () => {
+        interacting = false;
+        pos = carousel.scrollLeft;
+        clearTimeout(resumeTimer);
+        resumeTimer = setTimeout(() => { autoScroll = true; }, 1500);
+      };
+      carousel.addEventListener('pointerup', endInteract);
+      carousel.addEventListener('pointercancel', endInteract);
 
       return {
         scrollByStep(dir, step){
@@ -579,6 +623,16 @@
         }
       };
     }
+
+    // S6 seasonal poster: same infinite auto-scroll carousel so it can be swiped left/right.
+    initInfiniteCarousel({
+      carousel: document.querySelector('.poster-row'),
+      track: document.querySelector('.poster-track'),
+      dupStart: document.getElementById('poster-dup-start'),
+      direction: 1,
+      speed: 76.5,
+      pauseOnHover: true,
+    });
   </script>
 
   <!-- 07 Operator Review Video -->
@@ -591,7 +645,7 @@
   <!-- 08 Premium Locations -->
   <section class="premium-locations" id="s8">
     <div class="title"><p><span>어느 곳에서나 </span><span class="blue">프리미엄 하이엔드</span></p><p>24시 로봇카페 b;eat</p></div>
-    <div class="sub-text"><p>무인 카페 솔루션 및 편의 기능을 적용하여 자유롭게 운영할 수 있으며,</p><p>공간별 맞춤형 부가 수익 창출이 가능</p></div>
+    <div class="sub-text"><p><span>무인 카페 솔루션 및 편의 기능을 적용하여</span> <span>자유롭게 운영할 수 있으며,</span></p><p>공간별 맞춤형 부가 수익 창출이 가능</p></div>
     <div class="loc-carousel" id="loc-carousel">
       <div class="loc-track" id="loc-track">
         <div class="location-card"><div class="img-wrap"><img src="./assets/s8_01.jpg" /></div>
@@ -686,8 +740,9 @@
               <p>최소 인력, 최적의 시너지 효과</p>
             </div>
             <div class="sub-text-block">
-              <p>로봇커피와 협동으로 일부 시간대 유인 운영으로 베이커리 등</p>
-              <p>부가 콘텐츠로 매출을 다각화하는 스마트한 F&amp;B 솔루션</p>
+              <p>로봇커피와 협동으로 일부 시간대 유인 운영으로</p>
+              <p>베이커리 등 부가 콘텐츠로 매출을 다각화하는</p>
+              <p>스마트한 F&amp;B 솔루션</p>
             </div>
             <div class="sub-text-block">
               <p>배달 서비스 대응 가능하여 오프라인 매출 외에</p>
@@ -740,7 +795,7 @@
           <div class="clip-card"><a href="https://naver.me/551GaZOj" target="_blank" rel="noopener noreferrer"><img src="./assets/s10-clip4.png" /></a></div>
           <div class="clip-card"><a href="https://naver.me/xbKzyPHv" target="_blank" rel="noopener noreferrer"><img src="./assets/s10-clip5.png" /></a></div>
           <div class="clip-card"><a href="https://naver.me/GKI3aLZB" target="_blank" rel="noopener noreferrer"><img src="./assets/s10-clip6.png" /></a></div>
-          <div class="clip-card" aria-hidden="true"><a href="https://naver.me/5FDNtP5h" target="_blank" rel="noopener noreferrer" tabindex="-1"><img src="./assets/s10-clip1.png" /></a></div>
+          <div class="clip-card" aria-hidden="true" id="clip-dup-start"><a href="https://naver.me/5FDNtP5h" target="_blank" rel="noopener noreferrer" tabindex="-1"><img src="./assets/s10-clip1.png" /></a></div>
           <div class="clip-card" aria-hidden="true"><a href="https://m.blog.naver.com/harilog811/clip/14808230" target="_blank" rel="noopener noreferrer" tabindex="-1"><img src="./assets/s10-clip2.png" /></a></div>
           <div class="clip-card" aria-hidden="true"><a href="https://naver.me/FHOJKxmX" target="_blank" rel="noopener noreferrer" tabindex="-1"><img src="./assets/s10-clip3.png" /></a></div>
           <div class="clip-card" aria-hidden="true"><a href="https://naver.me/551GaZOj" target="_blank" rel="noopener noreferrer" tabindex="-1"><img src="./assets/s10-clip4.png" /></a></div>
@@ -783,6 +838,14 @@
     </div>
     <script>
       (function(){
+        initInfiniteCarousel({
+          carousel: document.querySelector('.clip-carousel'),
+          track: document.querySelector('.clip-track'),
+          dupStart: document.getElementById('clip-dup-start'),
+          direction: 1,
+          speed: 54.6,
+          pauseOnHover: true,
+        });
         initInfiniteCarousel({
           carousel: document.getElementById('review-carousel'),
           track: document.getElementById('review-track'),
