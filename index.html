@@ -61,6 +61,8 @@
   .nav-items { display:flex; align-items:center; gap:28px; }
   .nav-items p { font-weight:500; font-size:18px; color:#fff; white-space:nowrap; }
   .nav-items a { text-decoration:none; display:inline-flex; align-items:center; }
+  .nav-items a.active p { color:#559ce3; }
+  .nav-items a:not(.cta-btn):hover p { color:#999999; }
   .cta-btn { background:#559ce3; padding:8px 20px; border-radius:33px; }
   .cta-btn p { color:#fff; }
   .nav-toggle { display:none; flex-direction:column; justify-content:center; gap:5px; width:32px; height:32px; background:none; border:none; padding:0; cursor:pointer; z-index:60; }
@@ -1067,6 +1069,14 @@
     });
     navItems.querySelectorAll('a').forEach(function(a){
       a.addEventListener('click', closeMenu);
+    });
+
+    var navLinks = navItems.querySelectorAll('a:not(.cta-btn)');
+    navLinks.forEach(function(link){
+      link.addEventListener('click', function(){
+        navLinks.forEach(function(l){ l.classList.remove('active'); });
+        link.classList.add('active');
+      });
     });
   })();
 </script>
