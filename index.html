@@ -5,15 +5,22 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>b;eat Landing Page</title>
 <style>
-  @font-face { font-family:'Pretendard'; font-weight:400; src:url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/woff2/Pretendard-Regular.woff2') format('woff2'); }
-  @font-face { font-family:'Pretendard'; font-weight:500; src:url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/woff2/Pretendard-Medium.woff2') format('woff2'); }
-  @font-face { font-family:'Pretendard'; font-weight:600; src:url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/woff2/Pretendard-SemiBold.woff2') format('woff2'); }
-  @font-face { font-family:'Pretendard'; font-weight:700; src:url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/woff2/Pretendard-Bold.woff2') format('woff2'); }
-  @font-face { font-family:'Pretendard'; font-weight:800; src:url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/woff2/Pretendard-ExtraBold.woff2') format('woff2'); }
+  @font-face { font-family:'Pretendard'; font-weight:400; src:url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/packages/pretendard/dist/web/static/woff2/Pretendard-Regular.woff2') format('woff2'); }
+  @font-face { font-family:'Pretendard'; font-weight:500; src:url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/packages/pretendard/dist/web/static/woff2/Pretendard-Medium.woff2') format('woff2'); }
+  @font-face { font-family:'Pretendard'; font-weight:600; src:url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/packages/pretendard/dist/web/static/woff2/Pretendard-SemiBold.woff2') format('woff2'); }
+  @font-face { font-family:'Pretendard'; font-weight:700; src:url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/packages/pretendard/dist/web/static/woff2/Pretendard-Bold.woff2') format('woff2'); }
+  @font-face { font-family:'Pretendard'; font-weight:800; src:url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/packages/pretendard/dist/web/static/woff2/Pretendard-ExtraBold.woff2') format('woff2'); }
+  @font-face { font-family:'Pretendard'; font-weight:900; src:url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/packages/pretendard/dist/web/static/woff2/Pretendard-Black.woff2') format('woff2'); }
 
   * { box-sizing: border-box; margin:0; padding:0; }
   html { scroll-behavior:smooth; }
   body { font-family:'Pretendard', sans-serif; background:#fff; color:#151515; }
+  /* iOS Safari renders custom webfonts noticeably thinner than other platforms at the same
+     font-weight; nudge perceived weight up slightly there only (feature query is true only on
+     iOS Safari, not macOS Safari/Chrome), leaving every other platform untouched. */
+  @supports (-webkit-touch-callout: none) {
+    body { -webkit-text-stroke: 0.3px currentColor; }
+  }
   img { display:block; max-width:100%; }
   .page { width:100%; display:flex; flex-direction:column; align-items:center; }
   section { width:100%; display:flex; flex-direction:column; align-items:center; scroll-margin-top:90px; }
