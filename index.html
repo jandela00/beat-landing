@@ -27,7 +27,8 @@
 
   /* Shared section-title pattern (60px bold stacked title, used across multiple sections) */
   .stats .title, .feature-grid .title, .ai-solution .title, .hybrid-store .title,
-  .tech-timeline .title, .labor-cost .title, .investment-types .title {
+  .tech-timeline .title, .labor-cost .title, .investment-types .title,
+  .open-process .title, .faq .title, .consult .title {
     display:flex; flex-direction:column; gap:12px; font-weight:800; font-size:60px; line-height:1; text-align:center;
   }
   .title .blue { color:#559ce3; }
@@ -58,7 +59,7 @@
   .header-nav.scrolled { background:#151515; }
   .logo-mark { font-size:22px; font-weight:800; color:#fff; letter-spacing:.5px; }
   .logo-mark b { color:#559ce3; }
-  .nav-items { display:flex; align-items:center; gap:28px; }
+  .nav-items { display:flex; align-items:center; gap:clamp(24px,3.125vw,60px); }
   .nav-items p { font-weight:500; font-size:18px; color:#fff; white-space:nowrap; }
   .nav-items a { text-decoration:none; display:inline-flex; align-items:center; }
   .nav-items a.active p { color:#559ce3; }
@@ -271,7 +272,87 @@
   .invest-notes p { line-height:24px; }
   .invest-note-single { margin-top:-32px; padding-top:32px; text-align:left; color:#454545; font-size:20px; letter-spacing:-0.5px; }
 
-  /* ---------- 14 Footer ---------- */
+  /* ---------- 14 Opening Process ---------- */
+  .open-process { background:#edf4fb; padding:120px 8.3%; gap:32px; }
+  .open-process .sub-text, .faq .sub-text, .consult .sub-text { color:#454545; font-size:24px; line-height:24px; letter-spacing:-0.6px; text-align:center; padding-bottom:28px; }
+  .process { width:100%; max-width:1600px; display:flex; flex-direction:column; }
+  .proc-row { display:flex; align-items:center; justify-content:space-between; gap:12px; }
+  .proc-step { position:relative; flex:0 1 320px; min-width:0; height:140px; padding:10px; border:1px solid #559ce3; border-radius:100px; background:#fff;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px; text-align:center; }
+  .proc-step .st { font-weight:600; font-size:24px; line-height:24px; color:#000; }
+  .proc-step .sd { font-size:18px; line-height:18px; color:#666; }
+  .proc-step.is-final { background:#559ce3; }
+  .proc-step.is-final .st { color:#fff; }
+  .proc-step.is-final .sd { color:#cae5ff; font-weight:600; }
+  .proc-arrow { flex:none; width:37px; height:13px; }
+  .proc-down { display:flex; justify-content:flex-end; margin:15px 0; }
+  .proc-down span { flex:0 1 320px; display:flex; justify-content:center; }
+
+  /* ---------- 15 FAQ ---------- */
+  .faq { background:#fff; padding:120px 8.3%; gap:32px; }
+  .faq-list { width:100%; max-width:1600px; border-top:1px solid #d9d9d9; }
+  .faq-item { border-bottom:1px solid #d9d9d9; }
+  .faq-q { width:100%; display:flex; align-items:center; gap:24px; padding:24px 30px; background:none; border:0; cursor:pointer; text-align:left; font-family:inherit; }
+  .faq-q .qb { flex:none; width:42px; height:42px; border-radius:50px; background:#559ce3; color:#fff; display:flex; align-items:center; justify-content:center;
+    font-weight:600; font-size:24px; line-height:32px; letter-spacing:-0.6px; }
+  .faq-q .qt { flex:1; min-width:0; font-weight:600; font-size:24px; line-height:24px; letter-spacing:-0.6px; color:#454545; }
+  .faq-q .chev { flex:none; width:24px; height:24px; transition:transform .35s cubic-bezier(0.22,1,0.36,1); }
+  .faq-item:not(.open) .chev { transform:rotate(180deg); }
+  .faq-q:hover .qt, .faq-item.open .faq-q .qt { color:#559ce3; }
+  .faq-a { display:grid; grid-template-rows:0fr; transition:grid-template-rows .45s cubic-bezier(0.22,1,0.36,1); }
+  .faq-item.open .faq-a { grid-template-rows:1fr; }
+  .faq-a-inner { overflow:hidden; min-height:0; }
+  .faq-a-body { display:flex; gap:32px; padding:0 50px 32px; }
+  .faq-a-body .bar { flex:none; width:1px; background:#559ce3; }
+  .faq-a-body .txt { font-size:20px; line-height:28px; color:#666; }
+
+  /* ---------- 16 Consultation Request ---------- */
+  .consult { background:#f5f5f5; padding:120px 8.3%; gap:32px; }
+  .consult-tabs { display:flex; padding-bottom:28px; }
+  .ctab { width:300px; height:64px; background:#fff; border:1px solid #454545; color:#666; font-family:inherit; font-weight:400; font-size:24px; line-height:24px; letter-spacing:-0.6px; cursor:pointer; transition:background .2s ease, color .2s ease; }
+  .ctab.active { background:#454545; border-color:#454545; color:#fff; font-weight:600; }
+  .consult-card { width:100%; max-width:1340px; background:#fff; padding:80px; display:flex; flex-direction:column; align-items:center; gap:60px; }
+  .cf-group { width:100%; max-width:1180px; display:flex; flex-direction:column; align-items:flex-start; gap:32px; }
+  .cf-h { font-weight:700; font-size:32px; line-height:32px; letter-spacing:-0.6px; color:#454545; }
+  .consult em { font-style:normal; color:#db0000; }
+  .cf-radios { display:flex; gap:24px; }
+  .cf-radio, .cf-check { display:inline-flex; align-items:center; gap:12px; cursor:pointer; font-size:20px; line-height:20px; color:#454545; white-space:nowrap; }
+  .cf-radio input, .cf-check input { position:absolute; opacity:0; width:1px; height:1px; pointer-events:none; }
+  .cf-radio .ico { flex:none; width:24px; height:24px; background:url(./assets/s16-radio-off.svg) center/24px 24px no-repeat; }
+  .cf-radio input:checked ~ .ico { background-image:url(./assets/s16-radio-on.svg); }
+  .cf-radio input:checked ~ .txt { font-weight:700; }
+  .cf-check .ico { flex:none; width:32px; height:32px; background:url(./assets/s16-check-off.svg) center/32px 32px no-repeat; }
+  .cf-check input:checked ~ .ico { background-image:url(./assets/s16-check-on.svg); }
+  .cf-radio input:focus-visible ~ .ico, .cf-check input:focus-visible ~ .ico { outline:2px solid #559ce3; outline-offset:2px; }
+  .cf-row { display:flex; flex-wrap:wrap; gap:32px 40px; }
+  .cf-field { display:flex; align-items:center; }
+  .cf-field.full { width:100%; }
+  .cf-field label { flex:0 0 220px; font-size:20px; line-height:20px; letter-spacing:-0.6px; color:#454545; }
+  .cf-field.cf-company label { flex-basis:120px; }
+  .consult input[type=text], .consult input[type=tel], .consult input[type=email], .consult textarea { background:#f8f8f8; border:1px solid transparent; border-radius:0; padding:0 24px; height:64px;
+    font-family:inherit; font-size:20px; letter-spacing:-0.6px; color:#454545; outline:none; transition:border-color .2s ease; }
+  .consult input::placeholder, .consult textarea::placeholder { color:#999; }
+  .consult input[type=text]:focus, .consult input[type=tel]:focus, .consult input[type=email]:focus, .consult textarea:focus { border-color:#559ce3; }
+  .consult .invalid { border-color:#db0000 !important; }
+  .in-sm { width:400px; max-width:100%; }
+  .in-lg { flex:1 1 960px; min-width:0; max-width:960px; }
+  .consult textarea { height:240px; padding:32px 24px; line-height:24px; resize:vertical; }
+  .cf-label { font-weight:700; font-size:20px; line-height:20px; color:#454545; }
+  .cf-checks { display:flex; flex-wrap:wrap; gap:24px 40px; }
+  .cf-etc { flex-basis:100%; display:flex; align-items:center; gap:12px; }
+  .consult input.in-etc { width:676px; max-width:100%; min-width:0; height:52px; }
+  .cf-privacy { width:100%; display:flex; flex-direction:column; align-items:flex-start; gap:24px; padding-top:30px; }
+  .privacy-box { width:100%; height:200px; overflow-y:auto; background:#f8f8f8; padding:32px 24px; font-size:18px; line-height:24px; letter-spacing:-0.6px; color:#454545; }
+  .privacy-box p { max-width:952px; }
+  .privacy-box p + p { margin-top:24px; }
+  .cf-msg { min-height:0; margin:-36px 0 -24px; font-size:16px; color:#db0000; text-align:center; }
+  .cf-msg:empty { display:none; }
+  .cf-msg.ok { color:#559ce3; }
+  .consult-card[hidden] { display:none; }
+  .cf-submit { width:300px; height:72px; border:0; border-radius:80px; background:#559ce3; color:#fff; font-family:inherit; font-weight:600; font-size:24px; letter-spacing:-0.6px; cursor:pointer; transition:background .2s ease; }
+  .cf-submit:hover { background:#3f87cf; }
+
+  /* ---------- 17 Footer ---------- */
   .footer { background:#151515; color:#999; padding:66px 8.3% 138px; }
   .footer-row { width:100%; max-width:1600px; display:flex; align-items:flex-end; justify-content:space-between; gap:24px; flex-wrap:wrap; }
   .footer-info { display:flex; flex-direction:column; gap:19px; width:745px; max-width:100%; }
@@ -292,6 +373,9 @@
      at their intended wide-desktop width, without altering any base rule used above this range. */
   @media (max-width:1300px) and (min-width:901px) {
     .labor-wrap { flex-wrap:wrap; gap:40px; justify-content:center; }
+    .proc-step .st { font-size:20px; }
+    .proc-step .sd { font-size:15px; line-height:20px; }
+    .consult-card { padding:60px 40px; }
   }
 
   @media (max-width:900px) {
@@ -310,7 +394,8 @@
     .hero-tagline { font-size:20px; letter-spacing:4px; }
     .promo-title, .stats .title, .feature-grid .title, .ai-solution .title,
     .seasonal .title, .review-video .title, .premium-locations .title, .hybrid-store .title,
-    .customer-reviews .title, .tech-timeline .title, .labor-cost .title, .investment-types .title { font-size:38px; line-height:1.3; gap:0; }
+    .customer-reviews .title, .tech-timeline .title, .labor-cost .title, .investment-types .title,
+    .open-process .title, .faq .title, .consult .title { font-size:38px; line-height:1.3; gap:0; }
     .promo-title p { margin-bottom:0; }
     .stats .graph-area { display:flex; flex-direction:column; align-items:center; gap:16px; }
     .stats .sub-text { position:static; left:auto; top:auto; transform:none; white-space:normal; order:-1; }
@@ -384,6 +469,51 @@
     .donut-outer .donut-wrap { transform:scale(0.55); transform-origin:top left; }
     .cost-table-scroll { zoom:0.7; }
     .cost-table-scroll .cost-table { width:max-content; margin:0 auto; }
+    /* 14 Opening Process: one vertical column in step order 1 → 8 */
+    .open-process .sub-text, .faq .sub-text, .consult .sub-text { font-size:1.3em; line-height:1.4; }
+    .proc-row { flex-direction:column; align-items:stretch; gap:51px; }
+    .proc-row.rev { flex-direction:column-reverse; }
+    .proc-arrow { display:none; }
+    .proc-step { flex:none; width:100%; height:auto; min-height:96px; padding:20px 16px; gap:8px; }
+    .proc-step .st { font-size:20px; }
+    .proc-step .sd { font-size:15px; line-height:20px; }
+    .proc-step:not(.no-next)::after { content:''; position:absolute; left:50%; top:calc(100% + 8px); width:14px; height:35px; margin-left:-7px;
+      background:url(./assets/s14-arrow-down.svg) center/14px 35px no-repeat; }
+    .proc-down { justify-content:center; margin:8px 0; }
+    .proc-down span { flex:none; }
+    /* 15 FAQ */
+    .faq-q { gap:12px; padding:20px 4px; }
+    .faq-q .qb { width:32px; height:32px; font-size:18px; line-height:32px; }
+    .faq-q .qt { font-size:17px; line-height:24px; }
+    .faq-q .chev { width:18px; height:18px; }
+    .faq-a-body { gap:14px; padding:0 4px 24px 20px; }
+    .faq-a-body .txt { font-size:15px; line-height:24px; }
+    .faq-a-body .txt p { display:inline; }
+    /* 16 Consultation */
+    .consult-tabs { width:100%; }
+    .ctab { flex:1; width:auto; height:52px; font-size:17px; }
+    .consult-card { padding:32px 20px; gap:40px; }
+    .cf-group { gap:24px; }
+    .cf-h { font-size:24px; line-height:28px; }
+    .cf-radios { flex-wrap:wrap; gap:12px 24px; }
+    .cf-radio, .cf-check { font-size:16px; }
+    .cf-row { width:100%; flex-direction:column; gap:24px; }
+    .cf-field, .cf-field.full { width:100%; flex-direction:column; align-items:stretch; gap:10px; }
+    .cf-field label, .cf-field.cf-company label { flex:none; font-size:16px; }
+    .consult input[type=text], .consult input[type=tel], .consult input[type=email], .consult textarea { width:100%; max-width:none; height:52px; padding:0 16px; font-size:16px; }
+    .in-lg { flex:none; }
+    .consult textarea { height:180px; padding:16px; }
+    .cf-label { font-size:16px; line-height:22px; }
+    .cf-checks { gap:16px 24px; }
+    .cf-check .ico { width:26px; height:26px; background-size:26px 26px; }
+    .cf-etc .cf-check { flex:none; }
+    .consult input.in-etc { flex:1; width:auto; height:46px; }
+    .cf-privacy { padding-top:16px; gap:16px; }
+    .privacy-box { height:180px; padding:20px 16px; font-size:14px; line-height:21px; }
+    .privacy-box p + p { margin-top:16px; }
+    .cf-privacy .cf-check .txt { white-space:normal; }
+    .cf-msg { margin:-24px 0 -16px; font-size:14px; }
+    .cf-submit { width:100%; max-width:300px; height:60px; font-size:20px; }
     .floating-buttons { right:12px; bottom:12px; flex-direction:column; gap:0; }
     .float-btn { width:60px; height:60px; }
     .float-btn .float-img-pc { display:none; }
@@ -408,7 +538,7 @@
         <a href="#s8"><p>도입상권소개</p></a>
         <a href="#s13"><p>도입안내</p></a>
         <a href="https://www.beatcorp.io" target="_blank" rel="noopener noreferrer"><p>회사소개</p></a>
-        <a class="cta-btn" href="https://beatcorp.imweb.me/Request" target="_blank" rel="noopener noreferrer"><p>상담신청</p></a>
+        <a class="cta-btn" href="#s16"><p>상담신청</p></a>
       </div>
     </div>
     <div class="hero-content">
@@ -486,7 +616,7 @@
           <div class="f-desc"><span>클라우드 카메라 기반 주 7일 원격관제를 통해</span><span>매장 이슈 발생 시 신속한 확인 및 대응 지원</span></div></div>
         <div class="feature-card"><div class="img-wrap"><img src="./assets/s4_img5.jpg" /></div>
           <div class="f-title"><span class="dark">체계적인 운영 시스템</span><span class="blue">효율적 관리 지원</span></div>
-          <div class="f-desc"><span>매장 맞춤형 매뉴얼 제공을 통해</span><span>정교한 관리 지원으로 휴면 에러 방지</span></div></div>
+          <div class="f-desc"><span>매장 맞춤형 매뉴얼 제공을 통해</span><span>정교한 관리 지원으로 휴먼 에러 방지</span></div></div>
         <div class="feature-card"><div class="img-wrap"><img src="./assets/s4_img6.jpg" /></div>
           <div class="f-title"><span class="blue">간편 주문 APP</span><span class="dark">앱 가입 회원 30만명</span></div>
           <div class="f-desc"><span>매장 특성 기반 쿠폰 마케팅 및 프로모션으로</span><span>충성 고객 확보 가능</span></div></div>
@@ -976,7 +1106,7 @@
     <div class="invest-section">
       <div class="invest-tt">
         <h4><span class="blue">Buy Type.</span> 로봇 구매 유형</h4>
-        <p class="desc">투자자가 직업 운영을 목적으로 구매를 원하실 경우, 1명의 인건비로 3명의 퍼포먼스 가능</p>
+        <p class="desc">투자자가 직접 운영을 목적으로 구매를 원하실 경우, 1명의 인건비로 3명의 퍼포먼스 가능</p>
       </div>
       <div class="invest-tables-row">
         <div class="itable-scroll">
@@ -1040,7 +1170,155 @@
     </div>
   </section>
 
-  <!-- 14 Footer -->
+  <!-- 14 Opening Process -->
+  <section class="open-process" id="s14">
+    <div class="title"><p><span class="blue">개설 절차</span> 안내</p></div>
+    <div class="sub-text">상담부터 계약 및 설치까지 기존 F&amp;B 서비스 대비 빠르고 간소한 절차로 진행</div>
+    <div class="process">
+      <div class="proc-row">
+        <div class="proc-step"><p class="st">1. 도입 상담 신청</p><p class="sd">장비 체험 및 상담 진행</p></div>
+        <img class="proc-arrow" src="./assets/s14-arrow-right.svg" width="37" height="13" alt="" />
+        <div class="proc-step"><p class="st">2. 도입 매장 검토</p><p class="sd">레이아웃 확인 및 설치 검토</p></div>
+        <img class="proc-arrow" src="./assets/s14-arrow-right.svg" width="37" height="13" alt="" />
+        <div class="proc-step"><p class="st">3. 구매 계약 체결</p><p class="sd">계약서 작성 및 계약금 납부</p></div>
+        <img class="proc-arrow" src="./assets/s14-arrow-right.svg" width="37" height="13" alt="" />
+        <div class="proc-step no-next"><p class="st">4. 매장 인테리어</p><p class="sd">레이아웃 확정 및 시공, 인허가 진행</p></div>
+      </div>
+      <div class="proc-down"><span><img src="./assets/s14-arrow-down.svg" width="14" height="35" alt="" /></span></div>
+      <!-- Row 2 runs right-to-left on PC (5 → 8); mobile flips it back to top-to-bottom order. -->
+      <div class="proc-row rev">
+        <div class="proc-step is-final no-next"><p class="st">8. 매장 OPEN</p><p class="sd">본사 원격 관제 서비스</p></div>
+        <img class="proc-arrow" src="./assets/s14-arrow-left.svg" width="37" height="13" alt="" />
+        <div class="proc-step"><p class="st">7. 운영 교육</p><p class="sd">담당 슈퍼바이저의 장비 관리 교육 진행</p></div>
+        <img class="proc-arrow" src="./assets/s14-arrow-left.svg" width="37" height="13" alt="" />
+        <div class="proc-step"><p class="st">6. 오픈 준비</p><p class="sd">오픈 홍보물 및 본사 마케팅 지원</p></div>
+        <img class="proc-arrow" src="./assets/s14-arrow-left.svg" width="37" height="13" alt="" />
+        <div class="proc-step"><p class="st">5. b;eat 설치 및 셋업</p><p class="sd">설치 일정 확인 및 장비 설치</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 15 FAQ -->
+  <section class="faq" id="s15">
+    <div class="title"><p>FAQ</p></div>
+    <div class="sub-text">비트 도입 및 이용에 관해 자주 묻는 질문들입니다.</div>
+    <div class="faq-list">
+      <div class="faq-item">
+        <button type="button" class="faq-q" aria-expanded="false" aria-controls="faq-a1"><span class="qb">Q</span><span class="qt">도입 비용은 어떻게 되나요?</span><img class="chev" src="./assets/s15-chevron-up.svg" width="24" height="24" alt="" /></button>
+        <div class="faq-a" id="faq-a1"><div class="faq-a-inner"><div class="faq-a-body"><span class="bar"></span><div class="txt"><p>구매 형태 외에도 렌탈로 가능하며, 개인 신용도에 따라 차이는 있으나 1명 인건비 정도로 말씀드릴 수 있습니다.</p> <p>아울러, 임대차 계약 기간 관계없이 렌탈 승계 방식으로 재 판매도 가능하니 도입에 대한 부담이 적습니다.</p> <p>또한, 가맹 사업이 아니기 때문에 정기 점검 및 OS 운영비 외에 별도의 로열티가 없다는 장점도 큽니다.</p></div></div></div></div>
+      </div>
+      <div class="faq-item">
+        <button type="button" class="faq-q" aria-expanded="false" aria-controls="faq-a2"><span class="qb">Q</span><span class="qt">설치하기 위해 어느 정도 공간과 시설이 필요한가요?</span><img class="chev" src="./assets/s15-chevron-up.svg" width="24" height="24" alt="" /></button>
+        <div class="faq-a" id="faq-a2"><div class="faq-a-inner"><div class="faq-a-body"><span class="bar"></span><div class="txt"><p>키오스크 형태이기 때문에 매장 유무에 관계없이 급배수만 있다면 최소 5평형이면 설치가 가능합니다.</p> <p>때문에 매장이 없더라도 실내에 오픈된 장소에도 도입이 가능한 장점이 있습니다.</p></div></div></div></div>
+      </div>
+      <div class="faq-item">
+        <button type="button" class="faq-q" aria-expanded="false" aria-controls="faq-a3"><span class="qb">Q</span><span class="qt">A/S 지원은 해주는지요?</span><img class="chev" src="./assets/s15-chevron-up.svg" width="24" height="24" alt="" /></button>
+        <div class="faq-a" id="faq-a3"><div class="faq-a-inner"><div class="faq-a-body"><span class="bar"></span><div class="txt"><p>무상 A/S 기간을 1 년으로 제공해 드리고 있습니다.</p> <p>계약은 렌탈 형태로 진행하나 하드웨어 제조사로부터 쉽고 간편하게 서비스를 받으시도록 도움을 드리고 있습니다.</p></div></div></div></div>
+      </div>
+      <div class="faq-item">
+        <button type="button" class="faq-q" aria-expanded="false" aria-controls="faq-a4"><span class="qb">Q</span><span class="qt">위생 관리는 어떻게 진행되나요?</span><img class="chev" src="./assets/s15-chevron-up.svg" width="24" height="24" alt="" /></button>
+        <div class="faq-a" id="faq-a4"><div class="faq-a-inner"><div class="faq-a-body"><span class="bar"></span><div class="txt"><p>저희 b;eat 는 철저한 위생 관리를 위해 매일 1 회 세정하고 있으며, 원격 모니터링 서비스를 통해 세정 및 관리 항목들을 세밀하게 체크할 수 있습니다.</p></div></div></div></div>
+      </div>
+      <div class="faq-item">
+        <button type="button" class="faq-q" aria-expanded="false" aria-controls="faq-a5"><span class="qb">Q</span><span class="qt">무인 서비스라 관리가 쉬워야 할텐데 어떤 방식으로 관리를 하나요?</span><img class="chev" src="./assets/s15-chevron-up.svg" width="24" height="24" alt="" /></button>
+        <div class="faq-a" id="faq-a5"><div class="faq-a-inner"><div class="faq-a-body"><span class="bar"></span><div class="txt"><p>자체 개발한 원격 관리 OS 인 i-MAD 플랫폼을 통해 언제 어디서든 오류 파악 및 원자재별 소진량을 확인할 수 있고, 본사에서도 실시간 모니터링을 지원하고 있어</p> <p>안정적이고 편리한 운영이 가능하다는 점이 큰 차이점입니다.</p> <p>더 나아가 과거 주문 데이터를 통해 예상 소진 시간을 예측하고, 자동으로 물류를 발주하는 시스템 업그레이드를 준비하고 있으며 올해부터 제공할 예정입니다.</p></div></div></div></div>
+      </div>
+      <div class="faq-item">
+        <button type="button" class="faq-q" aria-expanded="false" aria-controls="faq-a6"><span class="qb">Q</span><span class="qt">유인 매장보다 음료 맛이 떨어지거나 제조 속도가 느리진 않나요?</span><img class="chev" src="./assets/s15-chevron-up.svg" width="24" height="24" alt="" /></button>
+        <div class="faq-a" id="faq-a6"><div class="faq-a-inner"><div class="faq-a-body"><span class="bar"></span><div class="txt"><p>저희는 스타벅스 사에 공급하는 스위스의 써머플랜 원두 머신 2대와 시럽을 한 번에 6개를 비치할 수 있는 데다, 고품질의 원두를 4종까지 사용이 가능하고,</p> <p>원자재도 대기업을 통해 소싱 받으니 소비자의 만족도가 높습니다.</p> <p>또한 온/오프라인으로 많은 주문을 받아도 병렬 제조 시스템을 통해 동시에 5잔까지 제조가 가능하니 소비자의 체감 속도는 유인 매장 및 경쟁사 보다 월등하다고</p> <p>말씀드립니다.</p></div></div></div></div>
+      </div>
+      <div class="faq-item">
+        <button type="button" class="faq-q" aria-expanded="false" aria-controls="faq-a7"><span class="qb">Q</span><span class="qt">음료 가격은 전 매장이 동일한가요?</span><img class="chev" src="./assets/s15-chevron-up.svg" width="24" height="24" alt="" /></button>
+        <div class="faq-a" id="faq-a7"><div class="faq-a-inner"><div class="faq-a-body"><span class="bar"></span><div class="txt"><p>저희는 가맹 사업이 아니므로 가격 책정이 자유롭습니다.</p> <p>때문에 휴게소나 쇼핑몰 등 특수 매장에서도 도입이 자유로운 장점이 있습니다.</p></div></div></div></div>
+      </div>
+      <div class="faq-item">
+        <button type="button" class="faq-q" aria-expanded="false" aria-controls="faq-a8"><span class="qb">Q</span><span class="qt">아파트나 기업 등 제한된 고객을 대상으로 서비스가 가능한가요?</span><img class="chev" src="./assets/s15-chevron-up.svg" width="24" height="24" alt="" /></button>
+        <div class="faq-a" id="faq-a8"><div class="faq-a-inner"><div class="faq-a-body"><span class="bar"></span><div class="txt"><p>b;eat 는 사원증, 카드키 등 RFID 결제 방식을 지원하며 급여나 관리비로 후정산이 가능하니 무리 없이 도입이 가능하며 이러한 장점으로</p> <p>이미 많은 기업과 아파트에 설치가 되어 있습니다.</p></div></div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 16 Consultation Request -->
+  <section class="consult" id="s16">
+    <div class="title"><p>상담신청</p></div>
+    <div class="sub-text">하단의 정보를 기입해주시면 빠른 시일 내에 친절하고 자세한 상담 도와드리겠습니다.</div>
+    <div class="consult-tabs" role="tablist">
+      <button type="button" class="ctab active" role="tab" aria-selected="true" data-region="domestic" aria-controls="cf-domestic">국내(Domestic)</button>
+      <button type="button" class="ctab" role="tab" aria-selected="false" data-region="overseas" aria-controls="cf-overseas">국외(Overseas)</button>
+    </div>
+    <form class="consult-card" id="cf-domestic" data-region="domestic" role="tabpanel" novalidate>
+      <input type="hidden" name="region" value="domestic" />
+      <div class="cf-group">
+        <h3 class="cf-h">예비 사업주 정보</h3>
+        <div class="cf-radios">
+          <label class="cf-radio"><input type="radio" name="bizType" value="개인사업자" checked /><span class="ico"></span><span class="txt">개인사업자</span></label>
+          <label class="cf-radio"><input type="radio" name="bizType" value="법인(기업)사업자" /><span class="ico"></span><span class="txt">법인(기업)사업자</span></label>
+        </div>
+        <div class="cf-row">
+          <div class="cf-field"><label for="cf-name">성함 <em>*</em></label><input class="in-sm" id="cf-name" name="name" type="text" placeholder="성함을 입력해 주세요." required /></div>
+          <div class="cf-field cf-company"><label for="cf-company">기업명</label><input class="in-sm" id="cf-company" name="company" type="text" placeholder="기업명을 입력해 주세요." /></div>
+        </div>
+        <div class="cf-field"><label for="cf-phone">연락처 <em>*</em></label><input class="in-sm" id="cf-phone" name="phone" type="tel" inputmode="tel" placeholder="휴대폰 번호를 입력해 주세요." required /></div>
+        <div class="cf-field full"><label for="cf-region">거주지(시, 군 까지만 기재) <em>*</em></label><input class="in-lg" id="cf-region" name="residence" type="text" placeholder="ex. 서울시 영등포구" required /></div>
+        <div class="cf-field full"><label for="cf-msg">문의 내용</label><textarea class="in-lg" id="cf-msg" name="message" placeholder="문의하실 내용을 입력해 주세요."></textarea></div>
+      </div>
+      <div class="cf-group">
+        <h3 class="cf-h">추가 정보</h3>
+        <p class="cf-label">비트를 알게 된 경로 (다중 선택 가능) <em>*</em></p>
+        <div class="cf-checks">
+          <label class="cf-check"><input type="checkbox" name="source" value="서비스 이용" /><span class="ico"></span><span class="txt">서비스 이용</span></label>
+          <label class="cf-check"><input type="checkbox" name="source" value="브랜드 홈페이지" /><span class="ico"></span><span class="txt">브랜드 홈페이지</span></label>
+          <label class="cf-check"><input type="checkbox" name="source" value="뉴스/기사 등 매체" /><span class="ico"></span><span class="txt">뉴스/기사 등 매체</span></label>
+          <label class="cf-check"><input type="checkbox" name="source" value="SNS" /><span class="ico"></span><span class="txt">SNS</span></label>
+          <label class="cf-check"><input type="checkbox" name="source" value="인터넷 검색" /><span class="ico"></span><span class="txt">인터넷 검색</span></label>
+          <div class="cf-etc">
+            <label class="cf-check"><input type="checkbox" name="source" value="기타" /><span class="ico"></span><span class="txt">기타</span></label>
+            <input class="in-etc" name="sourceEtc" type="text" placeholder="직접 입력" aria-label="기타 경로 직접 입력" />
+          </div>
+        </div>
+        <div class="cf-privacy">
+          <p class="cf-label">개인정보 수집 및 이용 동의 <em>*</em></p>
+          <div class="privacy-box" tabindex="0">
+            <p>주식회사 비트코퍼레이션(이하 ‘회사’라 합니다)은 회사가 제공하는 서비스와 관련하여 관련 법령상의 개인정보보호 규정에 따라 다음과 같이 귀하의 개인정보를 수집 및 이용합니다.</p>
+            <p>1. 수집 및 이용하는 개인정보의 항목<br>- 이름, 휴대폰번호, 이메일</p>
+            <p>2. 개인정보의 수집 및 이용 목적<br>㈜비트코퍼레이션 내방 신청 확인 및 이력 관리, 내방객 사후 관리, 안내문 및 마케팅 자료 발송, 통계분석, 본인 확인</p>
+            <p>3. 개인정보의 보유 및 이용기간<br>- 수집일로부터 30일</p>
+            <p>4. 개인정보의 수집 및 이용 동의 거부<br>회원은 언제든지 개인정보 수집 및 이용에 대한 동의를 거부할 권리가 있습니다. 다만, 개인정보의 수집 및 이용에 대한 동의를 거부할 경우 서비스의 특성상 이용이 제한될 수 있습니다.</p>
+          </div>
+          <label class="cf-check"><input type="checkbox" name="agree" value="Y" required /><span class="ico"></span><span class="txt">개인정보 수집 및 이용에 동의합니다.</span></label>
+        </div>
+      </div>
+      <p class="cf-msg" role="status" aria-live="polite"></p>
+      <button type="submit" class="cf-submit">상담 신청 완료</button>
+    </form>
+    <!-- Overseas form: fields mirror beatcorp.imweb.me/Request-Overseas -->
+    <form class="consult-card" id="cf-overseas" data-region="overseas" role="tabpanel" lang="en" novalidate hidden>
+      <input type="hidden" name="region" value="overseas" />
+      <div class="cf-group">
+        <div class="cf-field full"><label for="ov-name">Name <em>*</em></label><input class="in-lg" id="ov-name" name="name" type="text" placeholder="Please enter your name." required /></div>
+        <div class="cf-field full"><label for="ov-company">Company name</label><input class="in-lg" id="ov-company" name="company" type="text" placeholder="Please enter your company name." /></div>
+        <div class="cf-field full"><label for="ov-phone">Phone <em>*</em></label><input class="in-lg" id="ov-phone" name="phone" type="tel" inputmode="tel" placeholder="Please enter your phone number." required /></div>
+        <div class="cf-field full"><label for="ov-email">Email address <em>*</em></label><input class="in-lg" id="ov-email" name="email" type="email" inputmode="email" placeholder="Please enter your email address." required /></div>
+        <div class="cf-field full"><label for="ov-msg">Message</label><textarea class="in-lg" id="ov-msg" name="message" placeholder="Please enter your message."></textarea></div>
+        <div class="cf-privacy">
+          <p class="cf-label">Consent to the Collection and Use of Personal Information <em>*</em></p>
+          <div class="privacy-box" tabindex="0">
+            <p>Beat Corporation Co., Ltd. (hereinafter referred to as the "Company") collects and uses your personal information in accordance with relevant personal information protection laws and regulations related to the services provided by the Company, as outlined below.</p>
+            <p>1. Items of Personal Information Collected and Used<br>- Name, mobile phone number, email</p>
+            <p>2. Purpose of Collection and Use of Personal Information<br>To verify visit requests to Beat Corporation Co., Ltd., manage visitor history, provide follow-up management for visitors, send notifications and marketing materials, analyze statistics, and verify identity.</p>
+            <p>3. Retention and Use Period of Personal Information<br>- 30 days from the date of collection</p>
+            <p>4. Right to Refuse Consent to the Collection and Use of Personal Information<br>You have the right to refuse consent to the collection and use of your personal information. However, please note that refusal may limit your ability to use certain services due to the nature of those services.</p>
+            <p>The personal information you entered is stored on a server in AWS.</p>
+          </div>
+          <label class="cf-check"><input type="checkbox" name="agree" value="Y" required /><span class="ico"></span><span class="txt">I agree</span></label>
+        </div>
+      </div>
+      <p class="cf-msg" role="status" aria-live="polite"></p>
+      <button type="submit" class="cf-submit">SEND</button>
+    </form>
+  </section>
+
+  <!-- 17 Footer -->
   <section class="footer">
     <div class="footer-row">
       <div class="footer-info">
@@ -1098,6 +1376,87 @@
       link.addEventListener('click', function(){
         navLinks.forEach(function(l){ l.classList.remove('active'); });
         link.classList.add('active');
+      });
+    });
+  })();
+</script>
+<script>
+  // S15 FAQ accordion (all closed by default) + S16 consultation tabs/form.
+  (function(){
+    document.querySelectorAll('.faq-q').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        var item = btn.closest('.faq-item');
+        var isOpen = item.classList.toggle('open');
+        btn.setAttribute('aria-expanded', String(isOpen));
+      });
+    });
+
+    var forms = document.querySelectorAll('.consult .consult-card');
+    if (!forms.length) return;
+    var tabs = document.querySelectorAll('.consult .ctab');
+    tabs.forEach(function(tab){
+      tab.addEventListener('click', function(){
+        tabs.forEach(function(t){ t.classList.remove('active'); t.setAttribute('aria-selected','false'); });
+        tab.classList.add('active');
+        tab.setAttribute('aria-selected','true');
+        forms.forEach(function(f){ f.hidden = f.dataset.region !== tab.dataset.region; });
+      });
+    });
+
+    var TEXT = {
+      domestic: {
+        required:'필수 항목(*)을 올바르게 입력해 주세요.',
+        source:'비트를 알게 된 경로를 1개 이상 선택해 주세요.',
+        etc:'기타 경로를 직접 입력해 주세요.',
+        agree:'개인정보 수집 및 이용에 동의해 주세요.',
+        ok:'상담 신청이 접수되었습니다. 빠른 시일 내에 연락드리겠습니다.'
+      },
+      overseas: {
+        required:'Please fill in all required fields (*) correctly.',
+        agree:'Please agree to the collection and use of personal information.',
+        ok:'Thank you. Your inquiry has been sent and we will contact you shortly.'
+      }
+    };
+
+    forms.forEach(function(form){
+      var region = form.dataset.region;
+      var t = TEXT[region];
+      var msg = form.querySelector('.cf-msg');
+      var etcInput = form.querySelector('.in-etc');
+      var etcCheck = form.querySelector('input[name=source][value="기타"]');
+      // Typing into "기타 직접 입력" ticks the 기타 checkbox.
+      if (etcInput && etcCheck) etcInput.addEventListener('input', function(){ if (etcInput.value.trim()) etcCheck.checked = true; });
+      form.querySelectorAll('input, textarea').forEach(function(el){
+        el.addEventListener('input', function(){ el.classList.remove('invalid'); });
+      });
+
+      form.addEventListener('submit', function(e){
+        e.preventDefault();
+        msg.classList.remove('ok');
+        var firstBad = null;
+        form.querySelectorAll('input[required]:not([type=checkbox]), textarea[required]').forEach(function(el){
+          var v = el.value.trim();
+          var bad = !v ||
+            (el.type === 'tel' && v.replace(/\D/g,'').length < 7) ||
+            (el.type === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v));
+          el.classList.toggle('invalid', bad);
+          if (bad && !firstBad) firstBad = el;
+        });
+        var problem = '';
+        if (firstBad) problem = t.required;
+        else if (etcCheck && !form.querySelector('input[name=source]:checked')) problem = t.source;
+        else if (etcCheck && etcCheck.checked && !etcInput.value.trim()) { problem = t.etc; firstBad = etcInput; etcInput.classList.add('invalid'); }
+        else if (!form.elements.agree.checked) problem = t.agree;
+        if (problem) {
+          msg.textContent = problem;
+          if (firstBad) firstBad.focus();
+          return;
+        }
+        // TODO: 실제 접수 엔드포인트(메일 발송/구글폼/CRM 등)가 정해지면 여기서 전송.
+        // var data = new FormData(form); fetch(ENDPOINT, { method:'POST', body:data });
+        msg.classList.add('ok');
+        msg.textContent = t.ok;
+        form.reset();
       });
     });
   })();
@@ -1198,6 +1557,10 @@
       document.querySelectorAll('.cost-table-wrap'),
       document.querySelectorAll('.cost-note'),
       document.querySelectorAll('.invest-section'),
+      document.querySelectorAll('.process .proc-row, .process .proc-down'),
+      document.querySelectorAll('.faq-item'),
+      document.querySelectorAll('.consult-tabs'),
+      document.querySelectorAll('.consult-card'),
       document.querySelectorAll('.footer-info'),
       document.querySelectorAll('.footer .copyright'),
     ];
@@ -1210,7 +1573,7 @@
 
     // Sub-text reveals a beat after its OWN section's title word-cascade has finished starting
     // (not a flat delay), so a longer title can never be overtaken by the sub-text underneath it.
-    document.querySelectorAll('.stats .sub-text, .feature-grid .sub-text, .seasonal .sub-text, .premium-locations .sub-text, .customer-reviews .sub-text, .tech-timeline .sub-text, .labor-cost .sub-text').forEach(el => {
+    document.querySelectorAll('.stats .sub-text, .feature-grid .sub-text, .seasonal .sub-text, .premium-locations .sub-text, .customer-reviews .sub-text, .tech-timeline .sub-text, .labor-cost .sub-text, .open-process .sub-text, .faq .sub-text, .consult .sub-text').forEach(el => {
       el.classList.add('reveal-img');
       el.style.transitionDelay = sectionDelay(el, 150) + 'ms';
     });
